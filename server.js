@@ -17,9 +17,14 @@ wss.on('connection', (ws) => {
   console.log('Client connected');
   ws.on('close', () => console.log('Client disconnected'));
 });
-
-setInterval(() => {
+/*
+wss.onmessage = function(event) {
+    console.debug("WebSocket message received:", event);
+};
+*/
+/*setInterval(() => {
   wss.clients.forEach((client) => {
     client.send(new Date().toTimeString());
   });
 }, 1000);
+*/
