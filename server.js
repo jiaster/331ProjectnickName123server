@@ -17,7 +17,7 @@ wss.on('connection', (ws) => {
   console.log('Client connected');
   ws.on('close', () => console.log('Client disconnected'));
   wss.onmessage = function(event) {
-        console.debug("WebSocket message received:", event);
+        console.log("WebSocket message received:", event);
         wss.clients.forEach((client) => {
             client.send(event.data);
         });
@@ -25,7 +25,7 @@ wss.on('connection', (ws) => {
 });
 
 wss.onmessage = function(event) {
-    console.debug("WebSocket message received:", event);
+    console.log("WebSocket message received:", event);
     wss.clients.forEach((client) => {
         client.send(event.data);
     });
