@@ -31,11 +31,10 @@ wss.on('message', function incoming(data) {
 wss.on('connection', function connection(ws) {
 
     console.log('Client connected');
+    wss.on('message', function incoming(message) {
+        console.log('received: %s', message);
+        wss.send('something');
+    });
 
     wss.on('close', () => console.log('Client disconnected'));
-});
-
-wss.on('message', function incoming(message) {
-    console.log('received: %s', message);
-    wss.send('something');
 });
