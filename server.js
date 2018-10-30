@@ -1,7 +1,7 @@
 'use strict';
 
 const express = require('express');
-const SocketServer = require('ws').Server;
+const SocketServer = require('wss').Server;
 const path = require('path');
 
 const PORT = process.env.PORT || 3000;
@@ -17,14 +17,10 @@ wss.on('connection', (ws) => {
   console.log('Client connected');
   ws.on('close', () => console.log('Client disconnected'));
 });
-/*
+
 wss.onmessage = function(event) {
     console.debug("WebSocket message received:", event);
-};
-*/
-/*setInterval(() => {
-  wss.clients.forEach((client) => {
-    client.send(new Date().toTimeString());
-  });
-}, 1000);
-*/
+    wss.clients.forEach((client) => {
+        client.send(new Date().toTimeString());
+    });
+}
