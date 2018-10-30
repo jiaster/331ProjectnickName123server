@@ -6,9 +6,9 @@
       var ws = new WebSocket(HOST);
       var el = document.getElementById('text');
 
-      ws.onmessage = function (event) {
-          console.log('event.data');
-        el.innerHTML = event.data;
+      ws.on('message', function incoming(data) {
+          console.log(data);
+        el.innerHTML = data;
       };
     </script>
   </body>

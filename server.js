@@ -16,17 +16,13 @@ const wss = new SocketServer({ server });
 wss.on('connection', (ws) => {
   console.log('Client connected');
   ws.on('close', () => console.log('Client disconnected'));
-  wss.onmessage = function(event) {
-        console.log("WebSocket message received:", event);
-        wss.clients.forEach((client) => {
-            client.send(event.data);
-        });
-  }
 });
 
-wss.onmessage = function(event) {
+
+
+wss.on('message', function incoming(data) {
     console.log("WebSocket message received:", event);
     wss.clients.forEach((client) => {
-        client.send(event.data);
+        client.send(data);
     });
 }
