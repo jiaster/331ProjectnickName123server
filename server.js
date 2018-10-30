@@ -15,24 +15,15 @@ const wss = new SocketServer({ server });
 
 wss.on('connection', function open() {
 
-    wss.on('message', function incoming(data) {
-        console.log("WebSocket message received:", event);
-        wss.clients.forEach((client) => {
-            client.send(data);
-        });
-    });
 
 
   console.log('Client connected');
   wss.on('close', () => console.log('Client disconnected'));
 });
 
-/*
-
 wss.on('message', function incoming(data) {
     console.log("WebSocket message received:", event);
     wss.clients.forEach((client) => {
         client.send(data);
     });
-};
-*/
+});
