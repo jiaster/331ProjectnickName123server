@@ -2,7 +2,7 @@
   <body>
     <p id='text'>test</p>
     <script>
-      var HOST = location.origin.replace(/^http/, 'wss')
+      var HOST = location.origin.replace(/^http/, 'ws')
       var ws = new WebSocket(HOST);
       var el = document.getElementById('text');
 
