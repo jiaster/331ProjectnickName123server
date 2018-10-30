@@ -12,7 +12,7 @@ const server = express()
   .listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 const wss = new SocketServer({ server });
-
+/*
 wss.on('connection', function open() {
 
 
@@ -26,4 +26,13 @@ wss.on('message', function incoming(data) {
     wss.clients.forEach((client) => {
         client.send(data);
     });
+});
+*/
+wss.on('connection', function connection(ws) {
+    console.log('Client connected');
+    ws.on('message', function incoming(message) {
+        console.log('received: %s', message);
+    });
+
+    ws.send('something');
 });
