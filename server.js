@@ -1,7 +1,7 @@
 'use strict';
 
 const express = require('express');
-const SocketServer = require('wss').Server;
+const SocketServer = require('ws').Server;
 const path = require('path');
 
 const PORT = process.env.PORT || 3000;
