@@ -4,6 +4,7 @@ const express = require('express');
 const SocketServer = require('ws').Server;
 const path = require('path');
 
+
 const PORT = process.env.PORT || 3000;
 const INDEX = path.join(__dirname, 'index.html');
 const WebSocket = require('ws');
@@ -30,14 +31,14 @@ wss.on('message', function incoming(data) {
 });
 */
 wss.on('connection', function connection(ws) {
-
-    console.log('Client connected');
+    
+    console.log('Client connected'+ws.id);
     ws.on('message', function incoming(message) {
         console.log('received: %s', message);
         //ws.send(message);
         wss.clients.forEach(function each(client) {
             if (client.readyState === WebSocket.OPEN) {
-                client.send(message);
+                client.send(ws.uuid+message);
             }
         });
 
