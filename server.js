@@ -78,11 +78,20 @@ wss.on('connection', function connection(ws) {
 
         console.log('received: %s', message);
         //ws.send(message);
-
+        try{
         var data = JSON.parse(message);
+        } catch(e){//if data isint proper format
+            console.log('wrong format detected')
+            break;
+        }
         console.log(message);
         ws.id = data.id;
-        onlineClientsIDS.push(ws.id);
+
+        onlineClientsIDS.push(ws.id);//checks to see if client is on online list, if not add it to lsit
+        if (onlineClientsIDS.indexOf(ws.id) === -1) 
+            array.push(newItem)
+        else
+            console.log("id is already online");
 
         //var id  = data.id;
         var type = data.type;
