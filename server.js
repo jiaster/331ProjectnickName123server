@@ -1,5 +1,5 @@
 'use strict';
-
+//taskkill /F /IM node.exe
 const express = require('express');
 const SocketServer = require('ws').Server;
 const path = require('path');
@@ -82,14 +82,14 @@ wss.on('connection', function connection(ws) {
         var data = JSON.parse(message);
         } catch(e){//if data isint proper format
             console.log('wrong format detected')
-            break;
+            return;
         }
         console.log(message);
         ws.id = data.id;
 
         onlineClientsIDS.push(ws.id);//checks to see if client is on online list, if not add it to lsit
         if (onlineClientsIDS.indexOf(ws.id) === -1) 
-            array.push(newItem)
+            onlineClientsIDS.push(newItem);
         else
             console.log("id is already online");
 
@@ -114,5 +114,11 @@ wss.on('connection', function connection(ws) {
 
     });
 
-    wss.on('close', () => console.log('Client disconnected'));
+    ws.on('close', function (){ 
+        console.log('Client disconnected')});
+        var index = onlineClientsIDS.indexOf(ws.id);
+        if (index > -1) {
+            onlineClientsIDS.splice(index, 1);
+        }
+            
 });
