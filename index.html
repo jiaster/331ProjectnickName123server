@@ -1,6 +1,7 @@
 <html>
   <body>
     <p id='text'>test</p>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
       var HOST = location.origin.replace(/^http/, 'ws')
       var ws = new WebSocket(HOST);
@@ -8,9 +9,29 @@
 
       ws.onmessage = function (data) {
           console.log(data);
-        el.innerHTML = data.data;
+          document.getElementById('p1').innerHTML +="\n"+data.data;
       };
 
+      function send() {
+        var id = document.getElementById('id').value;
+        var type = document.getElementById('type').value;
+        var dataType = document.getElementById('dataType').value;
+        var data = document.getElementById('data').value;
+        
+        var obj = { id: id, type: type, [dataType]: data };
+        console.log('sending '+data);
+        ws.send(JSON.stringify(obj));
+      }
+      
+
     </script>
+
+  <form onsubmit="send();return false;">
+    ID: <input type="text" id="id"><br>
+    Type: <input type="text" id="type"><br>
+    <input type="text" id="dataType">: <input type="text" id="data"><br>
+    <input type="submit" value="Submit">
+  </form>
+  <p id="p1">Recieved data will show here:</p>
   </body>
 </html>
