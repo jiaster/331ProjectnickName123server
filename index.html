@@ -6,7 +6,7 @@
       var HOST = location.origin.replace(/^http/, 'ws')
       var el = document.getElementById('text');
       var serverID = "SERVER";
-
+      var ws;
       setupWebSocket();
 
       function setupWebSocket(){
