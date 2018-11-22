@@ -6,6 +6,7 @@
       var HOST = location.origin.replace(/^http/, 'ws')
       var ws = new WebSocket(HOST);
       var el = document.getElementById('text');
+      var serverID = "SERVER";
 
       ws.onmessage = function (data) {
           console.log(data);
@@ -26,6 +27,7 @@
 
     </script>
 
+  
   <form onsubmit="send();return false;">
     ID: <input type="text" id="id"><br>
     Type: <input type="text" id="type"><br>
