@@ -6,11 +6,12 @@
       var HOST = location.origin.replace(/^http/, 'ws')
       var el = document.getElementById('text');
       var serverID = "SERVER";
-      var ws;
-      setupWebSocket();
+      var ws= new WebSocket(HOST);
 
-      function setupWebSocket(){
-        var ws = new WebSocket(HOST);
+      function resetSocket(){
+        var ws= new WebSocket(HOST);
+      }
+
         //ws.onopen = function implement get tables function
         ws.onmessage = function (data) {
           console.log(data.data);
@@ -51,9 +52,8 @@
       };
 
       ws.onclose = function(){
-        setTimeout(setupWebSocket, 1000);
+        setTimeout(resetSocket, 1000);
     };
-    }
     
       function send() {
         var id = document.getElementById('id').value;
