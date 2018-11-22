@@ -196,7 +196,7 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
                 username: ws.username
             });
             userLogin.updateOne( { id: ws.id, url: ws.url }, 
-                { username : ws.username }, { upsert : true }, function (err, val) {
+                { id: ws.id, url: ws.url,username : ws.username }, { upsert : true }, function (err, val) {
                     //finds a document that matches id and url, if found, update username field
                     //if not found add such document
                 console.log(newUsername+" sent to db");
