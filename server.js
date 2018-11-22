@@ -170,7 +170,7 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
                 id: ws.id,
                 status : 'online'
               });
-              newUser.updateOne( { id: ws.id }, 
+              userStatus.updateOne( { id: ws.id }, 
                 { status : 'online' }, { upsert : true }, function (err, val) {
                     //finds a document that matches id , if found, change status to online
                     //if not found add it
