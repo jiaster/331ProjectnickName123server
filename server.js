@@ -201,8 +201,23 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
                     //finds a document that matches id and url, if found, update username field
                     //if not found add such document
                 console.log(newUsername+" sent to db");
+
+                wss.clients.forEach(function each(client) {//sends list of all usernames to site
+                    console.log(client.id);
+                    if (client.readyState === WebSocket.OPEN&&client.id=='SERVER') {
+                        userLogin.find({},{_id:0, __v:0}).exec(function(err, data) { 
+                            console.log(err, data, data.length); 
+                            client.send(data.toString());
+                            console.log(data);
+                        });
+                    }
+                });
             } );
             //newUsername.save(function (err) {if (err) console.log ('Error on save!')});
+
+        
+        
+        
         }
 
         if (type == 'password'){//password

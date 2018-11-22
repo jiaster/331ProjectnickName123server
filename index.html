@@ -9,8 +9,41 @@
       var serverID = "SERVER";
 
       ws.onmessage = function (data) {
-          console.log(data);
+          console.log(data.data);
           document.getElementById('p1').innerHTML +="\n"+data.data;
+          var newData = data.data.replace(/\'/g,"\"");
+          console.log(newData);
+          newData = newData.replace(/(\w+):/g, "\"$1\":" );
+          console.log(newData);
+          newData = "{ \"array\"  :["+newData+"]}";
+          console.log(newData);
+          var content = JSON.parse(newData);//.replace(/\'/g,"\""));
+          console.log(content);
+          var table = document.getElementById("loginTable");
+          table.getElementsByTagName("tbody")[0].innerHTML = table.rows[0].innerHTML;
+          for (var i = 0; i < content.array.length; i++){
+            var row = table.insertRow(-1);
+            var obj = content.array[i];
+            console.log(content.array[i]);
+            for (var key in obj){
+              if (key=='id'){
+                var cell0 = row.insertCell(0);
+                cell0.innerHTML = obj[key];
+              }
+              else if (key=='url'){
+                var cell1 = row.insertCell(1);
+                cell1.innerHTML = obj[key];
+              }
+              else if (key=='username'){
+                var cell2 = row.insertCell(2);
+                cell2.innerHTML = obj[key];
+              }
+              else if (key=='password'){
+                var cell3 = row.insertCell(3);
+                cell3.innerHTML = obj[key];
+              }
+              }
+          }
       };
 
       function send() {
@@ -21,7 +54,8 @@
         if (document.getElementById('data2').value!=""){
           var data2 = document.getElementById('data2').value;
           var dataType2 = document.getElementById('dataType2').value;
-          var obj = { id: id, type: type, [dataType]: data, [dataType2]: data2};
+          //var obj = { id: id, type: type, [dataType]: data, [dataType2]: data2};
+          var obj = { id: serverID, type: type, [dataType]: data, [dataType2]: data2};
         }
         else 
           var obj = { id: id, type: type, [dataType]: data };
@@ -40,6 +74,15 @@
     <input type="text" id="dataType2">: <input type="text" id="data2"><br>
     <input type="submit" value="Submit">
   </form>
+  <table style="width:100%" id="loginTable">
+    <tr>
+      <th>ID</th>
+      <th>URL</th> 
+      <th>USERNAME</th>
+      <th>PASSWORD</th>
+    </tr>
+  </table>
   <p id="p1">Recieved data will show here:</p>
+
   </body>
 </html>
