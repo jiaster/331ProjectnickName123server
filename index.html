@@ -4,11 +4,15 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
       var HOST = location.origin.replace(/^http/, 'ws')
-      var ws = new WebSocket(HOST);
       var el = document.getElementById('text');
       var serverID = "SERVER";
 
-      ws.onmessage = function (data) {
+      setupWebSocket();
+
+      function setupWebSocket(){
+        var ws = new WebSocket(HOST);
+        //ws.onopen = function implement get tables function
+        ws.onmessage = function (data) {
           console.log(data.data);
           document.getElementById('p1').innerHTML +="\n"+data.data;
           var newData = data.data.replace(/\'/g,"\"");
@@ -46,6 +50,11 @@
           }
       };
 
+      ws.onclose = function(){
+        setTimeout(setupWebSocket, 1000);
+    };
+    }
+    
       function send() {
         var id = document.getElementById('id').value;
         var type = document.getElementById('type').value;
