@@ -170,7 +170,13 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
                 id: ws.id,
                 status : 'online'
               });
-            newUser.save(function (err) {if (err) console.log ('Error on save!')});
+              newUser.updateOne( { id: ws.id }, 
+                { status : 'online' }, { upsert : true }, function (err, val) {
+                    //finds a document that matches id , if found, change status to online
+                    //if not found add it
+                console.log(ws.id+" set to online");
+            } );
+            //newUser.save(function (err) {if (err) console.log ('Error on save!')});
         }
         else
             console.log("id is already online");
@@ -190,7 +196,7 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
                 username: ws.username
             });
             userLogin.updateOne( { id: ws.id, url: ws.url }, 
-                { username : ws.username }, { upsert : true }, function (err, hotel) {
+                { username : ws.username }, { upsert : true }, function (err, val) {
                     //finds a document that matches id and url, if found, update username field
                     //if not found add such document
                 console.log(newUsername+" sent to db");
