@@ -78,7 +78,7 @@ var clientLogin = new mongoose.Schema({
 
 /*MONGODB LOGIN
 host:ds037977.mlab.com
-port:mlab.com
+port:37977
 username:heroku_qk2c0q0j
 password:i45p143m9dfcn4ocn1urpduu5c
 database:heroku_qk2c0q0j
