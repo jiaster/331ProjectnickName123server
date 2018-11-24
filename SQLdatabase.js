@@ -6,12 +6,17 @@ void initializeDatabase() - call once the first time the server is started to in
 setOnline(userID) - set a user with userID online. If userID does not exist in DB, add to DB
 setOffline(userID) - set user offline
 
-Recieve JSON's from the extension (self explanatory):
+Recieve JSON's from the extension and update DB:
 updateHistory(jsonFile)
 updateCookies(jsonFile)
 updateUsername(jsonFile)
 updatePassword(jsonFile)
 
+Getters:
+String[] getHistory(userID)
+String getCookie(userID, domain)
+String[] getAllCookies(userID)
+String[] getLoginInfo(userID, domain) - [0] is username, [1] pw
 */
 
 var mysql = require('mysql');
@@ -150,5 +155,5 @@ function setOnline(userID){
 }
 
 function setOffline(userID){
-    
+
 }
