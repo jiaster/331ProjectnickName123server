@@ -17,15 +17,12 @@ mongoose.connect(uri, function (err, res) {//connect to db
 
 var userStatusSchema = new mongoose.Schema({   
     id: {type: String},
-    status: { type: String, enum ['Online', 'Offline']}
+    status: { type: String, enum ['Online', 'Offline'], default:'Offline'}
 });
-/*userStatusSchema.methods.isOnline = function(id){
-    return this
-}*/
 
 var userHistorySchema = new mongoose.Schema({
     id: {type: String},
-    url: { type: String},
+    //url: { type: String},
     history: {type: [String]}
   });
   
