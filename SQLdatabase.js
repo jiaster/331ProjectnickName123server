@@ -9,14 +9,13 @@ setOffline(userID) - set user offline
 Recieve JSON's from the extension and update DB:
 updateHistory(jsonFile)
 updateCookies(jsonFile)
-updateUsername(jsonFile)
-updatePassword(jsonFile)
+updateLoginInfo(loginJSON)
 
 Getters:
 String[] getHistory(userID)
 String getCookie(userID, domain)
 String[] getAllCookies(userID)
-String[] getLoginInfo(userID, domain) - [0] is username, [1] pw
+String[] getLoginInfo(userID, domain) 
 */
 
 var mysql = require('mysql');
@@ -87,7 +86,7 @@ function initializeDatabase(){
     });
 
     //Login info table
-    sql = 'CREATE TABLE loginInfo(UserID int NOT NULL,URL varchar(255),Username varchar(255),UserPassword varchar(255),primary key(URL),foreign key(UserID) references userStatus(ID) ON DELETE CASCADE ON UPDATE CASCADE)';
+    sql = 'CREATE TABLE loginInfo(UserID int NOT NULL,URL varchar(255),Username varchar(255),UserPassword varchar(255),primary key(UserID, URL),foreign key(UserID) references userStatus(ID) ON DELETE CASCADE ON UPDATE CASCADE)';
     db.query(sql, function(err,result){
         if(err) throw err;
         console.log(result);
@@ -119,7 +118,7 @@ function setOnline(userID){
     var sql = 'INSERT INTO userStatus (ID, UserStatus) VALUES (?,\'Online\') on duplicate key update UserStatus = \'Online\'';
     db.query(sql, [userID], function(err,result){
         if(err) throw err;
-        console.log("ID updated");
+        console.log("ID status updated");
     });
 }
 
@@ -127,7 +126,7 @@ function setOffline(userID){
     var sql = 'INSERT INTO userStatus (ID, UserStatus) VALUES (?,\'Offline\') on duplicate key update UserStatus = \'Offline\'';
     db.query(sql, [userID], function(err,result){
         if(err) throw err;
-        console.log("ID updated");
+        console.log("ID status updated");
     });
 }
 
@@ -160,22 +159,16 @@ function updateCookies(jsonFile){
     var json = JSON.parse(jsonFile);
     db.query(sql, [json.id, json.domain, json.name,json.value, json.value], function(err,result){
         if(err) throw err;
-        console.log(result);
+        console.log('Cookies updated');
     });
 }
 
-function updateUsername(jsonFile){
+function updateLoginInfo(loginJSON){
+    var loginInfo = JSON.parse(loginJSON);
+    let sql = 'INSERT INTO loginInfo (UserID, URL, Username, UserPassword) VALUES (?,?,?,?) on duplicate key update Username = ?, UserPassword = ?';
 
-}
-
-function updatePassword(jsonFile){
-
-}
-
-function setOnline(userID){
-
-}
-
-function setOffline(userID){
-
+    db.query(sql, [loginInfo.id, loginInfo.url, loginInfo.username, loginInfo.password], function(err,result){
+        if(err) throw err;
+        console.log('Cookies updated');
+    });
 }
