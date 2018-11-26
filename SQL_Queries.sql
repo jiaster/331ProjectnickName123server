@@ -17,6 +17,6 @@ DELETE FROM history WHERE UserID = 111;
 
 INSERT INTO cookies (UserID, Domain, Name, Value) VALUES (111, 'google.com', 'google_cookie', 'h329djg93ja2') on duplicate key update Value = 'UPDATEDCOOKIE';
 
-INSERT INTO loginInfo (
+INSERT INTO loginInfo (UserID, URL, Username, UserPassword) VALUES ('111','google.com','bob23','nickname123') on duplicate key update Username='newUser', UserPassword='newPass'
 
 

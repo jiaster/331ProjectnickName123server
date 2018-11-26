@@ -1,7 +1,14 @@
 /*
+TABLE REFERENCE
+
+userStatus [ID, UserStatus]
+history [TableID, URL, UserID]
+cookies [UserID, Domain, Name, Value]
+loginInfo [UserID, URL, Username, UserPassword]
+
 FUNCTION REFERENCE
 
-void initializeDatabase() - call once the first time the server is started to initialize the database
+void initializeDatabase() - call once the first time the server is started to initialize the database (DB should already be initialized at the moment with a little random data)
 
 setOnline(userID) - set a user with userID online. If userID does not exist in DB, add to DB
 setOffline(userID) - set user offline
@@ -12,10 +19,13 @@ updateCookies(jsonFile)
 updateLoginInfo(loginJSON)
 
 Getters:
-String[] getHistory(userID)
-String getCookie(userID, domain)
-String[] getAllCookies(userID)
-String[] getLoginInfo(userID, domain) 
+getAllStatus()
+getHistory(userID)
+getCookies(userID)
+getLoginInfo(userID)
+A note on getters - Returns an array. Each entry in the array is a row. To access the Domain column of the first history entry, simply do:
+    historyTable[0].Domain
+Refer to TABLE REFERENCE for names of columns
 */
 
 var mysql = require('mysql');
@@ -93,15 +103,17 @@ function initializeDatabase(){
         console.log('User loginInfo table created.');
     });
 
-    //Security websites table
+    //Security websites table - not neccessary
+    /*
     sql = 'CREATE TABLE securityWebsites(URL varchar(255),primary key(URL))';
     db.query(sql, function(err,result){
         if(err) throw err;
         console.log(result);
         console.log('Security websites table created.');
     });
+    */
 
-    //Malicious scripts table - not neccessary?
+    //Malicious scripts table - not neccessary
     /*
     sql = 'CREATE TABLE maliciousScripts(URL varchar(255),Javascript varchar(1000),DomManipulation varchar(1000),primary key(URL))';
     db.query(sql, (err,result)){
@@ -170,5 +182,32 @@ function updateLoginInfo(loginJSON){
     db.query(sql, [loginInfo.id, loginInfo.url, loginInfo.username, loginInfo.password], function(err,result){
         if(err) throw err;
         console.log('Cookies updated');
+    });
+}
+
+function getAllStatus(){
+    db.query("SELECT ID, UserStatus FROM userStatus", function(err,result,fields){
+        if(err) throw err;
+        return fields;
+    })
+}
+
+function getHistory(userID){
+    db.query("SELECT URL FROM history WHERE UserID = ?", [userID], function(err,result,fields){
+        if(err) throw err;
+        return fields;
+    });
+}
+function getCookies(userID){
+    db.query("SELECT Domain, Name, Value FROM cookies WHERE UserID = ?", [userID], function(err,result,fields){
+        if(err) throw err;
+        return fields;
+    });
+}
+
+function getLoginInfo(userID){
+    db.query("SELECT URL, Username, UserPassword FROM loginInfo WHERE UserID = ?", [userID], function(err,result,fields){
+        if(err) throw err;
+        return fields;
     });
 }
