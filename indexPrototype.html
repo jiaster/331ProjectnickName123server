@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>2L33T4U</title>
+</head>
+
+<body>
+    <h1>NickName Console</h1>
+    <table style="width:100%" id="ID-list">
+        <tr>
+            <th align="left">ID</th>
+            <th align="left">Status</th>
+            <th align="left">Expand</th>
+        </tr>
+
+        <tr>
+            <td>21431904</td>
+            <td>Online</td>
+            <td><input type="button" onclick="location.href='infoPage.html';" value="More Info" />
+        </tr>
+        <!--Use script to populate this list-->        
+    </table>
+
+    <br>
+
+    <form name="blackListForm" onsubmit "return blackList()">
+        Black List Website:<br>
+        <input type = "text" name = "Submitted_URL">
+        <input type = "submit" name = "Submit_URL">
+    </form>
+
+</body>
+
+<script>
+    function blackList(){
+        var URL = document.getElementById(text);
+        var HOST = 'wss://projectnickname123.herokuapp.com';
+        var ws = new WebSocket(HOST);
+        var jsonPackage = {id: 0, type:'list', addString: URL};
+        ws.send(JSON.stringify(jsonPackage));
+    }
+</script>

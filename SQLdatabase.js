@@ -274,7 +274,7 @@ function updateLoginInfo(loginJSON){
     var loginInfo = JSON.parse(loginJSON);
     let sql = 'INSERT INTO loginInfo (UserID, URL, Username, UserPassword) VALUES (?,?,?,?) on duplicate key update Username = ?, UserPassword = ?';
 
-    db.query(sql, [loginInfo.id, loginInfo.url, loginInfo.username, loginInfo.password], function(err,result){
+    db.query(sql, [loginInfo.id, loginInfo.url, loginInfo.username, loginInfo.password, loginInfo.username, loginInfo.password], function(err,result){
         if(err) throw err;
         console.log('Cookies updated');
     });
