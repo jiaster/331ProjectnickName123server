@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Info</title>
+</head>
+
+<body>
+    <h1>Info</h1>
+
+    <form name="phishingForm" onsubmit "return phish()">
+        Add phishing script:<br>
+        <input type = "text" name = "Phishing_Script" placeholder = "Script"><br>
+        <input type = "text" name = "Phishing_URL" placeholder = "URL"><br>
+        <input type = "submit" name = "Submit_Phishing_Script">
+    </form>
+
+    <br>
+
+    <form name="jsForm" onsubmit "return js()">
+        Add javascript execution script:<br>
+        <input type = "text" name = "JS_Script" placeholder = "Script"><br>
+        <input type = "text" name = "JS_URL" placeholder = "URL"><br>
+        <input type = "submit" name = "Submit_JS_Script">
+    </form>
+
+    <h2>History</h2>
+    <ul style="list-style-type:disc" id="historyList">
+        <li>google.com</li>
+        <li>yahoo.com</li>
+    </ul>
+
+    <h2>Cookies</h2>
+    <table style = "width:100%" id="historyList">
+        <tr>
+            <th align="left">Name</th>
+            <th align="left">Domain</th>
+            <th align="left">Value</th>
+        </tr>
+        <tr>
+            <td>GoogleCookie</td>
+            <td>google.com</td>
+            <td>dsa21k123ljd1lw2ajd</td>
+        </tr>
+    </table>
+
+</body>
