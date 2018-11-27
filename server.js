@@ -216,6 +216,9 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
             //var test = JSON.stringify(clientArr);
             //ws.send(JSON.stringify(database.getAllStatus()));
         }
+        else if (type=='getList'){//get blacklsited sites
+            //TODO GET BLACK LISTED SITESdatabase.
+        }
 
 
 
@@ -275,7 +278,7 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
         //SENDING DATA
 
         wss.clients.forEach(function each(client) {//sends message back to ALL clients MUST CHANGE
-            if (client.readyState === WebSocket.OPEN) {
+            if (client.readyState === WebSocket.OPEN&&client.targetID==ws.id) {
                 client.send(message);
             }
         });
