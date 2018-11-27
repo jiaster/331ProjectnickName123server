@@ -138,14 +138,14 @@ module.exports = {
         var sql = 'INSERT INTO userStatus (ID, UserStatus) VALUES (?,\'Online\') on duplicate key update UserStatus = \'Online\'';
         db.query(sql, [userID], function(err,result){
             if(err) throw err;
-            console.log("ID status updated");
+            console.log("ID status updated " +userID +" online");
         });
     },
     setOffline: function (userID) {//WORKS
         var sql = 'INSERT INTO userStatus (ID, UserStatus) VALUES (?,\'Offline\') on duplicate key update UserStatus = \'Offline\'';
         db.query(sql, [userID], function(err,result){
             if(err) throw err;
-            console.log("ID status updated");
+            console.log("ID status updated " +userID + " set offline");
         });
     },
     updateHistory: function (json) {//works

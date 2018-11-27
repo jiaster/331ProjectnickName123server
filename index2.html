@@ -8,9 +8,12 @@
       var serverID = "SERVER";
       var ws= new WebSocket(HOST);
 
-      function resetSocket(){
+      function resetSocket(){//fix for reseting sockets
         console.log("reseting socket");
-        var ws= new WebSocket(HOST);
+        ws= new WebSocket(HOST);
+        ws.onclose = function(){
+        setTimeout(resetSocket, 1000);
+    };
       }
 
         //ws.onopen = function implement get tables function
