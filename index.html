@@ -3,7 +3,7 @@
     <p id='text'>test</p>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script>
-      var HOST = location.origin.replace(/^http/, 'ws')
+      var HOST = location.origin.replace(/^http/, 'ws');
       var el = document.getElementById('text');
       var serverID = "SERVER";
       var ws= new WebSocket(HOST);
