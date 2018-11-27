@@ -164,7 +164,7 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
         }
         ws.id = data.id;//get client id
         var type = data.type;
-        if (type=='online'){
+        if (type=='Online'){
             if (onlineClientsIDS.indexOf(ws.id) === -1) {//checks to see if client is on online list, if not add it to lsit
                 console.log(ws.id+" connected");
                 onlineClientsIDS.push(ws.id);
