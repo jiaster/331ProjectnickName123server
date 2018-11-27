@@ -193,10 +193,10 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
         }
 
         else if (type == 'history'){//history list
-            var history = data.history;
+            //var history = data.history;
             //TODO SEND HISTORY TO DATABASE
 
-            database.updateHistory(message);
+            //database.updateHistory(message);
         
         }
 
