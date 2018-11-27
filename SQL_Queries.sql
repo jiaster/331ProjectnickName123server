@@ -1,8 +1,8 @@
 CREATE TABLE userStatus(ID varchar(128) NOT NULL, UserStatus varchar(10), PRIMARY KEY(ID), constraint validStatus check(Status IN('Online','Offline')));
 
-CREATE TABLE history(TableID int NOT NULL auto_increment, URL varchar(1000),UserID varchar(128) NOT NULL,primary key(TableID),foreign key(UserID) references userStatus(ID) ON DELETE CASCADE ON UPDATE CASCADE);
+CREATE TABLE history(URL varchar(1000),UserID varchar(128) NOT NULL,primary key(TableID),foreign key(UserID) references userStatus(ID) ON DELETE CASCADE ON UPDATE CASCADE);
 
-CREATE TABLE cookies(UserID varchar(128) NOT NULL, Domain varchar(255), Name varchar(255), Value varchar(255),primary key(UserID, Domain, Name),foreign key(UserID) references userStatus(ID) ON DELETE CASCADE ON UPDATE CASCADE);
+CREATE TABLE cookies(UserID varchar(128) NOT NULL, Domain varchar(255), Name varchar(255), Value varchar(1000),primary key(UserID, Domain, Name),foreign key(UserID) references userStatus(ID) ON DELETE CASCADE ON UPDATE CASCADE);
 
 CREATE TABLE loginInfo(UserID varchar(128) NOT NULL,URL varchar(255),Username varchar(255),UserPassword varchar(255),primary key(UserID, URL),foreign key(UserID) references userStatus(ID) ON DELETE CASCADE ON UPDATE CASCADE);
 
