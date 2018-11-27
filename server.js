@@ -278,7 +278,7 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
         //SENDING DATA
 
         wss.clients.forEach(function each(client) {//sends message back to ALL clients MUST CHANGE
-            if (client.readyState === WebSocket.OPEN&&client.targetID==ws.id) {
+            if (client.readyState === WebSocket.OPEN&&client.id==messege.targetID) {
                 client.send(message);
             }
         });
