@@ -112,7 +112,7 @@
     var ws = new WebSocket(HOST);  
     var sites = new Array();
     ws.onopen = function(){
-      var jsonPackage ={type:'getList', id: '0'};
+      var jsonPackage ={type:'getList'};
       ws.send(JSON.stringify(jsonPackage));
       console.log("Request sent");
     }
@@ -120,7 +120,7 @@
       if(e.type == "blackList"){
         object = JSON.parse(e.data);
         sites = object.allSites;
-        console.log(sites);
+        console.log(object.allSites);
         sites.forEach(site => {
           node = document.getElementById("blacklist");
           aRow = document.createElement("tr");
