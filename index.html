@@ -119,17 +119,20 @@
     }
     ws.onmessage = function(e){
       object = JSON.parse(e.data);
-      sites = object.allSites;
-      console.log(object.allSites);
-      console.log("got something");
-      sites.forEach(site => {
-        node = document.getElementById("blacklist");
-        aRow = document.createElement("li");
-        aRow.classList.add("list-group-item");
-        aCol = document.createTextNode(site);
-        node.appendChild(aRow);
-        aRow.appendChild(aCol);
-      });
+      switch(object.type){
+        case 'blackList':
+          sites = object.allSites;
+          console.log(object.allSites);
+          console.log("got something");
+          sites.forEach(site => {
+            node = document.getElementById("blacklist");
+            aRow = document.createElement("li");
+            aRow.classList.add("list-group-item");
+            aCol = document.createTextNode(site);
+            node.appendChild(aRow);
+            aRow.appendChild(aCol);
+          });
+      }
     }
   </script>
   
