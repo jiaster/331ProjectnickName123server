@@ -228,7 +228,7 @@ module.exports = {
     },
 
     getSecurityWebsites: function (userID) {
-        db.query("SELECT URL FROM securitywebsites WHERE UserID = ?", [userID], function(err,result,fields){
+        db.query("SELECT URL FROM securitywebsites", function(err,result,fields){
             if(err) throw err;
             return result;
         });
