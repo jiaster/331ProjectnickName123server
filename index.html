@@ -108,7 +108,6 @@
 	</ul>
 
   <script>
-    var URL = document.getElementById(text);
 	  var HOST = 'wss://projectnickname123.herokuapp.com';
     var ws = new WebSocket(HOST);
     var jsonPackage ={type:"getList"};
@@ -117,6 +116,7 @@
       if(e.type == "blackList"){
         object = JSON.parse(e.data);
         sites = object.allSites;
+        console.log(sites);
         sites.forEach(site => {
           node = document.getElementById("blacklist");
           aRow = document.createElement("tr");
