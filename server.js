@@ -44,7 +44,7 @@ mongodb://heroku_qk2c0q0j:i45p143m9dfcn4ocn1urpduu5c@ds037977.mlab.com:37977/her
 var onlineClientsIDS = [];
 
 
-app.get('/index2', function (req, res) {
+app.get('index2', function (req, res) {
     res.sendFile(path.join(__dirname + 'index2.html'));
   });
 
