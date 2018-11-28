@@ -31,31 +31,18 @@ const PORT = process.env.PORT || 3000;
 const INDEX = path.join(__dirname, 'index.html');
 const WebSocket = require('ws');
 
-var server = express();
-  //.use((req, res) => res.sendFile(INDEX) )
-  //.listen(PORT, () => console.log(`Listening on ${ PORT }`));
+const server = express()
+  .use((req, res) => res.sendFile(INDEX) )
+  .listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
-
-server.use(express.static(path.join(__dirname)));
-server.listen(process.env.PORT || 5000);
-
-//var app = express();
+var app = express();
+const wss = new SocketServer({ server });
 
 
 mysql://b35b454793036b:91686762@us-cdbr-iron-east-01.cleardb.net/heroku_9059f11db120273?reconnect=true
 mongodb://heroku_qk2c0q0j:i45p143m9dfcn4ocn1urpduu5c@ds037977.mlab.com:37977/heroku_qk2c0q0j
 var onlineClientsIDS = [];
 
-
-server.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname + 'index.html'));
-  });
-  
-  // add other routes below
-server.get('/index2', function (req, res) {
-    res.sendFile(path.join(__dirname + 'index2.html'));
-});
-const wss = new SocketServer({ server });
 
 wss.on('connection', function connection(ws) {//Upon a connection from a client
     //console.log(database.test("test string"));
