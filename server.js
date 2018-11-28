@@ -173,6 +173,9 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
 
                 console.log(ws.id+" online status sent to server");
 
+                wss.clients.forEach(function each(client) {
+                    console.log('Client.ID: ' + client.id);
+                });
             
                 /*
                 var newUser = new userStatus ({
@@ -277,9 +280,9 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
 
         //SENDING DATA
         else if (type=='message'){
-        onlineClientsIDS.forEach(function each(client) {//sends message back to ALL clients MUST CHANGE
+            wss.clients.forEach(function each(client) {//sends message back to ALL clients MUST CHANGE
             console.log(wss.clients);
-            if (client.readyState === WebSocket.OPEN&&client.id==message.targetID) {
+            if (client.readyState === WebSocket.OPEN&&client.id===message.targetID) {
                 client.send(message);
                 console.log(message+ " sent to "+client.id);
             }
@@ -290,7 +293,7 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
 
     ws.on('close', function (){ //when a client disconnects
         console.log(ws.id +' disconnected')
-        var index = onlineClientsIDS.indexOf(ws.id);
+        var index = onlineClientsIDS.indexOf(ws);
         if (index > -1) {//remove id from active clients array
             onlineClientsIDS.splice(index, 1);
             //TODO SET ID IN ACTIVE USERS DATABASE TO OFFLINE
