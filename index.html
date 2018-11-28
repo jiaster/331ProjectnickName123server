@@ -117,10 +117,11 @@
       console.log("Request sent");
     }
     ws.onmessage = function(e){
-      if(e.type == "blackList"){
+      if(e.type == 'blackList'){
         object = JSON.parse(e.data);
         sites = object.allSites;
         console.log(object.allSites);
+        console.log("got something");
         sites.forEach(site => {
           node = document.getElementById("blacklist");
           aRow = document.createElement("tr");
