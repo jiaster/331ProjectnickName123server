@@ -97,7 +97,7 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
             var jsonObj= {id:ws.id,type:'blackList',allSites:siteArr};
             wss.clients.forEach(function each(client) {//sends message back to ALL clients MUST CHANGE
                 if (client.readyState === WebSocket.OPEN) {
-                    client.send(jsonObj);
+                    client.send(JSON.stringify(jsonObj));
                 }
             });
         }
