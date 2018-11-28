@@ -61,34 +61,16 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
             if (onlineClientsIDS.indexOf(ws.id) === -1) {//checks to see if client is on online list, if not add it to lsit
                 console.log(ws.id+" connected");
                 onlineClientsIDS.push(ws.id);
-                //TODO send user id to database
                 database.setOnline(ws.id);//WORKS
 
                 console.log(ws.id+" online status sent to server");
-
-            
-                /*
-                var newUser = new userStatus ({
-                    id: ws.id,
-                    status : 'online'
-                  });
-                  userStatus.updateOne( { id: ws.id }, 
-                    { status : 'online' }, { upsert : true }, function (err, val) {
-                        //finds a document that matches id , if found, change status to online
-                        //if not found add it
-                    console.log(ws.id+" set to online");
-                } );
-                */
-                //newUser.save(function (err) {if (err) console.log ('Error on save!')});
             }
             else
                 console.log("ERROR!!!:id is already online");
         }
 
         else if (type == 'history'){//history list
-            var history = data.history;
-            //TODO SEND HISTORY TO DATABASE
-
+            //var history = data.history;
             database.updateHistory(message);
         
         }
