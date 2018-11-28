@@ -165,11 +165,11 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
         ws.id = data.id;//get client id
         var type = data.type;
         if (type=='Online'){
-            if (onlineClientsIDS.indexOf(ws.id) === -1) {//checks to see if client is on online list, if not add it to lsit
+            if (onlineClientsIDS.indexOf(ws) === -1) {//checks to see if client is on online list, if not add it to lsit
                 console.log(ws.id+" connected");
-                onlineClientsIDS.push(ws.id);
+                onlineClientsIDS.push(ws);
                 //TODO send user id to database
-                database.setOnline(ws.id);//WORKS
+                database.setOnline(ws);//WORKS
 
                 console.log(ws.id+" online status sent to server");
 
@@ -277,7 +277,8 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
 
         //SENDING DATA
         else if (type=='message'){
-        wss.clients.forEach(function each(client) {//sends message back to ALL clients MUST CHANGE
+        onlineClientsIDS.forEach(function each(client) {//sends message back to ALL clients MUST CHANGE
+            console.log(wss.clients);
             if (client.readyState === WebSocket.OPEN&&client.id==message.targetID) {
                 client.send(message);
                 console.log(message+ " sent to "+client.id);
