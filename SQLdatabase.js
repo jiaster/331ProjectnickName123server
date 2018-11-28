@@ -227,7 +227,7 @@ module.exports = {
         });
     },
 
-    getSecurityWebsites: function (userID) {
+    getSecurityWebsites: function () {
         db.query("SELECT URL FROM securitywebsites", function(err,result,fields){
             if(err) throw err;
             return result;
