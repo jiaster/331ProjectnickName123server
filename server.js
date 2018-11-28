@@ -43,6 +43,11 @@ mysql://b35b454793036b:91686762@us-cdbr-iron-east-01.cleardb.net/heroku_9059f11d
 mongodb://heroku_qk2c0q0j:i45p143m9dfcn4ocn1urpduu5c@ds037977.mlab.com:37977/heroku_qk2c0q0j
 var onlineClientsIDS = [];
 
+
+express.get('/index2', function (req, res) {
+    res.sendFile(path.join(__dirname + 'index2.html'));
+  });
+
 wss.on('connection', function connection(ws) {//Upon a connection from a client
     //console.log(database.test("test string"));
     console.log('A Client connected');
