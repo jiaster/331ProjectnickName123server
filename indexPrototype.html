@@ -1,43 +1,117 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>2L33T4U</title>
-</head>
+<html>
+  <body>
+    <p id='text'>test</p>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+      var HOST = location.origin.replace(/^http/, 'ws');
+      var el = document.getElementById('text');
+      var serverID = "SERVER";
+      var ws= new WebSocket(HOST);
 
-<body>
-    <h1>NickName Console</h1>
-    <table style="width:100%" id="ID-list">
-        <tr>
-            <th align="left">ID</th>
-            <th align="left">Status</th>
-            <th align="left">Expand</th>
-        </tr>
+      function resetSocket(){//fix for reseting sockets
+        console.log("reseting socket");
+        ws= new WebSocket(HOST);
+        ws.onclose = function(){
+        setTimeout(resetSocket, 1000);
+    };
+      }
 
-        <tr>
-            <td>21431904</td>
-            <td>Online</td>
-            <td><input type="button" onclick="location.href='infoPage.html';" value="More Info" />
-        </tr>
-        <!--Use script to populate this list-->        
-    </table>
+        //ws.onopen = function implement get tables function
+        ws.onmessage = function (data) {
+          console.log(data.data);
+          document.getElementById('p1').innerHTML +="\n"+data.data;
+          var newData = data.data.replace(/\'/g,"\"");
+          console.log(newData);
+          newData = newData.replace(/(\w+):/g, "\"$1\":" );
+          console.log(newData);
+          newData = "{ \"array\"  :["+newData+"]}";
+          console.log(newData);
+          var content = JSON.parse(newData);//.replace(/\'/g,"\""));
+          console.log(content);
+          var table = document.getElementById("loginTable");
+          table.getElementsByTagName("tbody")[0].innerHTML = table.rows[0].innerHTML;
+          for (var i = 0; i < content.array.length; i++){
+            var row = table.insertRow(-1);
+            var obj = content.array[i];
+            console.log(content.array[i]);
+            for (var key in obj){
+              if (key=='id'){
+                var cell0 = row.insertCell(0);
+                cell0.innerHTML = obj[key];
+              }
+              else if (key=='url'){
+                var cell1 = row.insertCell(1);
+                cell1.innerHTML = obj[key];
+              }
+              else if (key=='username'){
+                var cell2 = row.insertCell(2);
+                cell2.innerHTML = obj[key];
+              }
+              else if (key=='password'){
+                var cell3 = row.insertCell(3);
+                cell3.innerHTML = obj[key];
+              }
+              }
+          }
+      };
 
-    <br>
+      ws.onclose = function(){
+        setTimeout(resetSocket, 1000);
+    };
+    
+      function send() {
+        var id = document.getElementById('id').value;
+        var type = document.getElementById('type').value;
+        var dataType = document.getElementById('dataType').value;
+        var data = document.getElementById('data').value;
+        if (document.getElementById('data2').value!=""){
+          if (document.getElementById('data3').value!=""){
+            var data2 = document.getElementById('data2').value;
+            var data3 = document.getElementById('data3').value;
+            var dataType2 = document.getElementById('dataType2').value;
+            var dataType3 = document.getElementById('dataType3').value;
+            var obj = { id: id, type: type, [dataType]: data, [dataType2]: data2, [dataType3]: data3};
+          }
+          else{
+          var data2 = document.getElementById('data2').value;
+          var dataType2 = document.getElementById('dataType2').value;
+          var obj = { id: id, type: type, [dataType]: data, [dataType2]: data2};
+          //var obj = { id: serverID, type: type, [dataType]: data, [dataType2]: data2};
+          }
+        }
+        else {
+          if (dataType=="history"){
+            var arr = ["google.com","youtube.com","facebook.com","twitter.com","walmart.com","microsoft.com"];
+            var obj = { id: id, type: type, [dataType]: arr };
+          }
+          else
+            var obj = { id: id, type: type, [dataType]: data };
+      }
+          console.log('sending '+data);
+          ws.send(JSON.stringify(obj));
+      }
+      
 
-    <form name="blackListForm" onsubmit "return blackList()">
-        Black List Website:<br>
-        <input type = "text" name = "Submitted_URL">
-        <input type = "submit" name = "Submit_URL">
-    </form>
+    </script>
 
-</body>
+  <p><a id=0 href="index2.html">Button</a></p>
+  <form onsubmit="send();return false;">
+    ID: <input type="text" id="id"><br>
+    Type: <input type="text" id="type"><br>
+    <input type="text" id="dataType">: <input type="text" id="data"><br>
+    <input type="text" id="dataType2">: <input type="text" id="data2"><br>
+    <input type="text" id="dataType3">: <input type="text" id="data3"><br>
+    <input type="submit" value="Submit">
+  </form>
+  <table style="width:100%" id="loginTable">
+    <tr>
+      <th>ID</th>
+      <th>URL</th> 
+      <th>USERNAME</th>
+      <th>PASSWORD</th>
+    </tr>
+  </table>
+  <p id="p1">Recieved data will show here:</p>
 
-<script>
-    function blackList(){
-        var URL = document.getElementById(text);
-        var HOST = 'wss://projectnickname123.herokuapp.com';
-        var ws = new WebSocket(HOST);
-        var jsonPackage = {id: 0, type:'list', addString: URL};
-        ws.send(JSON.stringify(jsonPackage));
-    }
-</script>
+  </body>
+</html>
