@@ -87,13 +87,13 @@
 	</script>
 
 	<script>
-		var jsonPackage = {type: statusRequest};
+		var jsonPackage = {id: "0", type: "getClients"};
 		ws.send(JSON.stringify(jsonPackage));
 		ws.onmessage = function(e){
 			if(e.type == "status"){
 				object = JSON.parse(e.data);
 				var ids = object.ids;
-				var statusArray = object.statuses;
+				var statusArray = object.status;
 				var table = document.getElementById(statusTable);
 				for(i = 0; i < ids.length; i++){
 					var aRow = document.createElement('tr');
