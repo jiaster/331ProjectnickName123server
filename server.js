@@ -36,8 +36,7 @@ var server = express();
   //.listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
 
-//server.use(express.static(path.join(__dirname)));
-server.use((req, res) => res.sendFile(INDEX) );
+server.use(express.static(path.join(__dirname)));
 server.listen(process.env.PORT || 5000);
 
 //var app = express();
