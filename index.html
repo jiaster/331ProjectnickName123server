@@ -114,19 +114,19 @@
     ws.onopen = function(){
       var jsonPackage ={type:"getList"};
       ws.send(JSON.stringify(jsonPackage));
-      ws.onmessage = function(e){
-        if(e.type == "blackList"){
-          object = JSON.parse(e.data);
-          sites = object.allSites;
-          console.log(sites);
-          sites.forEach(site => {
-            node = document.getElementById("blacklist");
-            aRow = document.createElement("tr");
-            aCol = document.createTextNode(site);
-            node.appendChild(aRow);
-            aRow.appendChild(aCol);
-          });
-        }
+    }
+    ws.onmessage = function(e){
+      if(e.type == "blackList"){
+        object = JSON.parse(e.data);
+        sites = object.allSites;
+        console.log(sites);
+        sites.forEach(site => {
+          node = document.getElementById("blacklist");
+          aRow = document.createElement("tr");
+          aCol = document.createTextNode(site);
+          node.appendChild(aRow);
+          aRow.appendChild(aCol);
+        });
       }
     }
   </script>
