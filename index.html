@@ -112,7 +112,7 @@
     var ws = new WebSocket(HOST);  
     var sites = new Array();
     ws.onopen = function(){
-      var jsonPackage ={type:"getList", id: '0'};
+      var jsonPackage ={type:'getList', id: '0'};
       ws.send(JSON.stringify(jsonPackage));
       console.log("Request sent");
     }
