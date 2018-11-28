@@ -169,7 +169,7 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
                 console.log(ws.id+" connected");
                 onlineClientsIDS.push(ws);
                 //TODO send user id to database
-                database.setOnline(ws);//WORKS
+                database.setOnline(ws.id);//WORKS
 
                 console.log(ws.id+" online status sent to server");
 
