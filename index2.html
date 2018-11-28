@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>SpeedDemon</title>
     <link rel="stylesheet" href="bootstrap-4.0.0-dist/css/bootstrap.min.css"> 
-	<script src="bootstrap-4.0.0-dist/js/bootstrap.min.js"></script>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+	  <script src="bootstrap-4.0.0-dist/js/bootstrap.min.js"></script>
+	  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
   	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
@@ -103,15 +103,36 @@
 	<br><br><br>
 
 	<h4>Blacklisted Sites</h4>
-	<ul class = "list-group">
+	<ul class = "list-group" id="blacklist">
 		<li class="list-group-item">securitee.org</li>
 	</ul>
 
-	<script>
+  <script>
+    var HOST = 'wss://projectnickname123.herokuapp.com';
+    var ws = new WebSocket(HOST);  
+    var sites = new Array();
+    ws.onopen = function(event){
+      var jsonPackage ={type:'getList'};
+      ws.send(JSON.stringify(jsonPackage));
+      console.log("Request sent");
+    }
+    ws.onmessage = function(e){
+      object = JSON.parse(e.data);
+      sites = object.allSites;
+      console.log(object.allSites);
+      console.log("got something");
+      sites.forEach(site => {
+        node = document.getElementById("blacklist");
+        aRow = document.createElement("tr");
+        aCol = document.createTextNode(site);
+        node.appendChild(aRow);
+        aRow.appendChild(aCol);
+      });
+    }
+  </script>
+  
+  <script>
 	    function blackList(){
-	        var URL = document.getElementById(text);
-	        var HOST = 'wss://projectnickname123.herokuapp.com';
-	        var ws = new WebSocket(HOST);
 	        var jsonPackage = {id: 0, type:'list', addString: URL};
 	        ws.send(JSON.stringify(jsonPackage));
 	    }
@@ -121,28 +142,6 @@
 	<script>
 		function idClick(count){		
 			localStorage.setItem("id", document.getElementById(count).innerHTML);
-		}
-	</script>
-
-	<script>
-		var jsonPackage = {type: statusRequest};
-		ws.send(JSON.stringify(jsonPackage));
-		ws.onmessage = function(e){
-			if(e.type == "status"){
-				object = JSON.parse(e.data);
-				var ids = object.ids;
-				var statusArray = object.statuses;
-				var table = document.getElementById(statusTable);
-				for(i = 0; i < ids.length; i++){
-					var aRow = document.createElement('tr');
-					var idCol = document.createTextNode(ids[i]);
-					var statusCol = document.createTextNode(statusArray[i]);
-					idCol.setAttribute('href', "infoPage.html");
-					table.appendChild(aRow);
-					aRow.appendChild(idCol);
-					aRow.appendChild(statusCol);
-				}
-			}	
 		}
 	</script>
 	
