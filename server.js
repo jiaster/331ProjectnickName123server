@@ -281,13 +281,22 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
         //SENDING DATA
         else if (type=='message'){
             wss.clients.forEach(function each(client) {//sends message back to ALL clients MUST CHANGE
-            console.log(wss.clients);
+            client.log(client);
             if (client.readyState === WebSocket.OPEN&&client.id===message.targetID) {
                 client.send(message);
                 console.log(message+ " sent to "+client.id);
             }
         });
     }
+
+    wss.clients.forEach(function each(client) {//sends message back to ALL clients MUST CHANGE
+        client.log(client);
+        if (client.readyState === WebSocket.OPEN) {
+            client.send(message);
+            console.log(message+ " sent to "+client.id);
+        }
+    });
+
 
     });
 
