@@ -114,6 +114,7 @@
     ws.onopen = function(){
       var jsonPackage ={type:"getList"};
       ws.send(JSON.stringify(jsonPackage));
+      console.log("Request sent");
     }
     ws.onmessage = function(e){
       if(e.type == "blackList"){
