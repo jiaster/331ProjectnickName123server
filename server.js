@@ -17,9 +17,11 @@ git commit -m "commit message"
 git push heroku master
 git push origin master
 */
+
 const express = require('express');
 const SocketServer = require('ws').Server;
 const path = require('path');
+var bodyParser = require("body-parser");
 var mysql = require('mysql');
 var database = require('./SQLdatabase.js');
 //var mongodb = require('mongodb');
@@ -31,13 +33,19 @@ const PORT = process.env.PORT || 3000;
 const INDEX = path.join(__dirname, 'index.html');
 const WebSocket = require('ws');
 
-const server = express()
-  .use((req, res) => res.sendFile(INDEX) )
-  .listen(PORT, () => console.log(`Listening on ${ PORT }`));
+const server = express();
 
-var app = express();
+server.use((req, res) => res.sendFile(INDEX) );
+server.listen(PORT, () => console.log(`Listening on ${ PORT }`));
+server.use(bodyParser.json());
+
+//var app = express();
 const wss = new SocketServer({ server });
 
+server.post("/api/contacts", function(req, res) {
+    console.log(res);
+    var newContact = req.body;
+  });
 
 mysql://b35b454793036b:91686762@us-cdbr-iron-east-01.cleardb.net/heroku_9059f11db120273?reconnect=true
 mongodb://heroku_qk2c0q0j:i45p143m9dfcn4ocn1urpduu5c@ds037977.mlab.com:37977/heroku_qk2c0q0j
