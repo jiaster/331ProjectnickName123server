@@ -35,20 +35,24 @@
       }
 
       ws.onmessage = function(e){
-        document.getElementById('p1').innerHTML +="\n"+data.data;
+        document.getElementById('p1').innerHTML +="\n"+e.data;
 
         console.log(e.data);
         object = JSON.parse(e.data);
-        sites = object.allSites;
-        console.log(object.allSites);
-        console.log("got something");
-        sites.forEach(site => {
-          node = document.getElementById("blacklist");
-          aRow = document.createElement("tr");
-          aCol = document.createTextNode(site);
-          node.appendChild(aRow);
-          aRow.appendChild(aCol);
-        });
+        switch(object.type){
+        case 'blackList':
+          sites = object.allSites;
+          console.log(object.allSites);
+          console.log("got something");
+          sites.forEach(site => {
+            node = document.getElementById("blacklist");
+            aRow = document.createElement("li");
+            aRow.classList.add("list-group-item");
+            aCol = document.createTextNode(site);
+            node.appendChild(aRow);
+            aRow.appendChild(aCol);
+          });
+          }
       }
   
       function blackList(){
@@ -92,7 +96,7 @@
           console.log('sending '+data);
           ws.send(JSON.stringify(obj));
       }
-      
+
     </script>
 
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">

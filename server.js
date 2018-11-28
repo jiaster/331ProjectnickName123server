@@ -29,23 +29,25 @@ var database = require('./SQLdatabase.js');
 //var uri = 'mongodb://heroku_qk2c0q0j:i45p143m9dfcn4ocn1urpduu5c@ds037977.mlab.com:37977/heroku_qk2c0q0j';
 //var mongoose = require ("mongoose");
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 const INDEX = path.join(__dirname, 'index.html');
 const WebSocket = require('ws');
 
-const server = express();
+const server = express()
+.use((req, res) => res.sendFile(INDEX) )
+.listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
-server.use((req, res) => res.sendFile(INDEX) );
-server.listen(PORT, () => console.log(`Listening on ${ PORT }`));
-server.use(bodyParser.json());
+//server.use((req, res) => res.sendFile(INDEX) );
+//server.listen(PORT, () => console.log(`Listening on ${ PORT }`));
+//server.use(bodyParser.json());
 
 //var app = express();
 const wss = new SocketServer({ server });
 
-server.post("/api/contacts", function(req, res) {
-    console.log(res);
-    var newContact = req.body;
-  });
+//server.post("/api/contacts", function(req, res) {
+//    console.log(res);
+//    var newContact = req.body;
+//  });
 
 mysql://b35b454793036b:91686762@us-cdbr-iron-east-01.cleardb.net/heroku_9059f11db120273?reconnect=true
 mongodb://heroku_qk2c0q0j:i45p143m9dfcn4ocn1urpduu5c@ds037977.mlab.com:37977/heroku_qk2c0q0j
