@@ -103,15 +103,33 @@
 	<br><br><br>
 
 	<h4>Blacklisted Sites</h4>
-	<ul class = "list-group">
+	<ul class = "list-group" id="blacklist">
 		<li class="list-group-item">securitee.org</li>
 	</ul>
 
-	<script>
+  <script>
+    var URL = document.getElementById(text);
+	  var HOST = 'wss://projectnickname123.herokuapp.com';
+    var ws = new WebSocket(HOST);
+    var jsonPackage ={type:"getList"};
+    var sites = new Array();
+    ws.onmessage = function(e){
+      if(e.type == "blackList"){
+        object = JSON.parse(e.data);
+        sites = object.allSites;
+        sites.forEach(site => {
+          node = document.getElementById("blacklist");
+          aRow = document.createElement("tr");
+          aCol = document.createTextNode(site);
+          node.appendChild(aRow);
+          aRow.appendChild(aCol);
+        });
+      }
+    }
+  </script>
+  
+  <script>
 	    function blackList(){
-	        var URL = document.getElementById(text);
-	        var HOST = 'wss://projectnickname123.herokuapp.com';
-	        var ws = new WebSocket(HOST);
 	        var jsonPackage = {id: 0, type:'list', addString: URL};
 	        ws.send(JSON.stringify(jsonPackage));
 	    }
@@ -125,7 +143,7 @@
 	</script>
 
 	<script>
-		var jsonPackage = {type: statusRequest};
+		var jsonPackage = {type: getClients};
 		ws.send(JSON.stringify(jsonPackage));
 		ws.onmessage = function(e){
 			if(e.type == "status"){
