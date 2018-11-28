@@ -141,28 +141,6 @@
 			localStorage.setItem("id", document.getElementById(count).innerHTML);
 		}
 	</script>
-
-	<script>
-		var jsonPackage = {type: getClients};
-		ws.send(JSON.stringify(jsonPackage));
-		ws.onmessage = function(e){
-			if(e.type == "status"){
-				object = JSON.parse(e.data);
-				var ids = object.ids;
-				var statusArray = object.statuses;
-				var table = document.getElementById(statusTable);
-				for(i = 0; i < ids.length; i++){
-					var aRow = document.createElement('tr');
-					var idCol = document.createTextNode(ids[i]);
-					var statusCol = document.createTextNode(statusArray[i]);
-					idCol.setAttribute('href', "infoPage.html");
-					table.appendChild(aRow);
-					aRow.appendChild(idCol);
-					aRow.appendChild(statusCol);
-				}
-			}	
-		}
-	</script>
 	
 	</div>
 	</div>
