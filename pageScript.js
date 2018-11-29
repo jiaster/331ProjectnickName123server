@@ -2,7 +2,6 @@ var HOST = location.origin.replace(/^http/, 'ws');
 var serverID = "0";
 var ws = new WebSocket(HOST);  
 var sites = new Array();
-alert("Script is here");
 
 function resetSocket(){//fix for reseting sockets
     console.log("reseting socket");
@@ -11,10 +10,9 @@ function resetSocket(){//fix for reseting sockets
         setTimeout(resetSocket, 1000);
     };
     }
-    ws.onclose = function(){
+ws.onclose = function(){
     setTimeout(resetSocket, 1000);
 };
-
 
 ws.onopen = function(event){
     var jsonPackage ={type:'getList'};
@@ -46,8 +44,8 @@ ws.onmessage = function(e){
         case 'statusList':
             console.log("got a status");
             var ids = object.ids;
-            statuses = object.status;
-            ids.forEach(id =>{
+            var statuses = object.status;
+            object.ids.forEach(id =>{
                 makeCard(id);
             });
         case 'idHistory':
@@ -91,38 +89,10 @@ else {
     else
     var obj = { id: id, type: type, [dataType]: data };
 }
-    console.log('sending '+data);
+    console.log('sending '+obj);
     ws.send(JSON.stringify(obj));
 }
 
-
-var HOST = 'wss://projectnickname123.herokuapp.com';
-var ws = new WebSocket(HOST);  
-var sites = new Array();
-ws.onopen = function(event){
-    var jsonPackage ={type:'getList'};
-    ws.send(JSON.stringify(jsonPackage));
-    
-}
-ws.onmessage = function(e){
-    object = JSON.parse(e.data);
-    switch(object.type){
-        case 'blackList':
-            sites = object.allSites;
-            //console.log(object.allSites);
-            //console.log("got something");
-            console.log("got a blacklist");
-            sites.forEach(site => {
-            node = document.getElementById("blacklist");
-            aRow = document.createElement("li");
-            aRow.classList.add("list-group-item");
-            aCol = document.createTextNode(site);
-            node.appendChild(aRow);
-            aRow.appendChild(aCol);
-            });
-        
-    }
-}
 
 window.userCount = 0;   // Declare a global variable
 			        //This global var is used to give each new user card added a different id
