@@ -2,6 +2,7 @@ var HOST = location.origin.replace(/^http/, 'ws');
 var serverID = "0";
 var ws = new WebSocket(HOST);  
 var sites = new Array();
+alert("asd0");
 
 function resetSocket(){//fix for reseting sockets
     console.log("reseting socket");
@@ -9,7 +10,7 @@ function resetSocket(){//fix for reseting sockets
     ws.onclose = function(){
         setTimeout(resetSocket, 1000);
     };
-    }
+}
 ws.onclose = function(){
     setTimeout(resetSocket, 1000);
 };
