@@ -234,6 +234,12 @@ module.exports = {
             //return userStatus;
             callback(urlArr);
         });
+    },
+
+    insertPhishingInfo: function(info){
+        db.query("INSERT INTO phishInfo(Info) VALUES ?"), [info], function(err,result){
+            if(err) throw err;
+        }
     }
 };
 
