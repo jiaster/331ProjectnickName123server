@@ -96,7 +96,9 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
             //var userStatus=database.getAllStatus();
             
             database.getAllStatus(function(userStatus){
-                console.log(userStatus);
+                //console.log(userStatus);
+                console.log("sending online client list");
+                wss.broadcast(userStatus);
             });
             //console.log(userStatus);
             //var test = JSON.stringify(clientArr);
@@ -116,13 +118,14 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
             message.forEach();
         }
         //SENDING DATA
-        wss.broadcast
+        wss.broadcast(message)
+        /*
         wss.clients.forEach(function each(client) {//sends message back to ALL clients MUST CHANGE
             if (client.readyState === WebSocket.OPEN) {
                 client.send(message);
             }
         });
-
+*/
 
     });
 
