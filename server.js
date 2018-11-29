@@ -103,7 +103,6 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
             //console.log(userStatus);
             //var test = JSON.stringify(clientArr);
             //ws.send(JSON.stringify(database.getAllStatus()));
-            
         }
         else if (type=='getList'){//get blacklsited sites
             
@@ -120,6 +119,9 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
         }
         else if (type=='cookie'){
             message.forEach();
+        }
+        else if (type=='getLoginInfo'){
+            
         }
         //SENDING DATA
         wss.broadcast(message);
