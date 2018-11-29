@@ -23,6 +23,7 @@ function resetSocket(){//fix for reseting sockets
     };
 }
 ws.onclose = function(){
+		console.log("reseting socket");
     setTimeout(resetSocket, 1000);
 };
 
