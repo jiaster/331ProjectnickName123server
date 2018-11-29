@@ -172,7 +172,7 @@ module.exports = {
     updateCookies: function (json) {
         let sql = 'INSERT INTO cookies (UserID, Domain, Name, Value) VALUES (?, ?, ?, ?) on duplicate key update Value = ?';
         //var json = JSON.parse(jsonFile);
-        console.log("database json " +jsonFile);
+        console.log("database json " +json);
         db.query(sql, [json.id, json.domain, json.name,json.value, json.value], function(err,result){
             if(err) throw err;
             console.log('Cookies updated');
