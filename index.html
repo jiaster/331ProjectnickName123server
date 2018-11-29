@@ -58,9 +58,9 @@ ws.onmessage = function(e){
             console.log("got a status");
             var ids = object.ids;
             var statuses = object.status;
-            object.ids.forEach(id =>{
-                makeCard(id);
-            });
+            for (i = 0; i < ids.length; i++){
+                makeCard(ids[i],statuses[i])
+            }
         case 'idHistory':
         case 'cookie':
         case 'username':
@@ -110,9 +110,9 @@ else {
 window.userCount = 0;   // Declare a global variable
 			        //This global var is used to give each new user card added a different id
 
-function makeCard(id) {
+function makeCard(id, status) {
     userCount++;
-    
+    console.log("making");
     var cardInfo = document.getElementById("infoCard");
     var card = cardInfo.cloneNode(true);
     //Clones info card to be turned into a user card
@@ -120,7 +120,8 @@ function makeCard(id) {
 
     var header = card.children[0];
     var link = header.children[0];
-    link.innerHTML = id;
+    if(status == 'Online') link.innerHTML = id;
+    else link.innerHTML = "<font color=\"red\">" + id + "</font>";
     link.id = "link" + userCount; //prepends "link" to id so it's diff than card id
 
     link.href = "#collapse" + userCount;
@@ -176,7 +177,6 @@ function blackList(){
 	
 		<div class="container-fluid">
 			<h3>All Users</h3>
-			<p><strong>Note:</strong> The <strong>data-parent</strong> attribute makes sure that all collapsible elements under the specified parent will be closed when one of the collapsible item is shown.</p>
 			<div id="accordion">
           <div id="infoCard" class="card">
               <div id="infoCardHeader" class="card-header">
