@@ -121,8 +121,13 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
         else if (type=='cookie'){
             console.log(message);
             var site = message.website;
-            var cookieString = message.cookie[1].trim();
+            console.log(site);
+            var cookieArr = message.cookie;
+            console.log(cookieArr);
+            var cookieString = cookieArr[1].trim();
+            console.log(cookieString);
             var cookieName = cookieString.subString(0,cookieString.indexOf('='));
+            console.log("Cookie Name"+cookieName);
             var cookieValue = cookieString.subString(cookieString.indexOf('=',cookieString.length));
             console.log("Cookie String"+cookieString);
             console.log("Cookie Name"+cookieName);
