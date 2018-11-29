@@ -2,6 +2,7 @@ var HOST = location.origin.replace(/^http/, 'ws');
 var serverID = "0";
 var ws = new WebSocket(HOST);  
 var sites = new Array();
+alert("Script is here");
 
 function resetSocket(){//fix for reseting sockets
     console.log("reseting socket");
