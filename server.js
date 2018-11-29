@@ -103,6 +103,7 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
             //console.log(userStatus);
             //var test = JSON.stringify(clientArr);
             //ws.send(JSON.stringify(database.getAllStatus()));
+            
         }
         else if (type=='getList'){//get blacklsited sites
             
