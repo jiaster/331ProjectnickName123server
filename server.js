@@ -106,19 +106,22 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
         }
         else if (type=='getList'){//get blacklsited sites
             
-            var siteArr = ["avast", "avg","bitdefender"];
-            var jsonObj= {id:ws.id,type:'blackList',allSites:siteArr};
-            wss.clients.forEach(function each(client) {//sends message back to ALL clients MUST CHANGE
-                if (client.readyState === WebSocket.OPEN) {
-                    client.send(JSON.stringify(jsonObj));
-                }
+            //var siteArr = ["avast", "avg","bitdefender"];
+            database.getSecurityWebsites(function(urlList){
+                console.log(urlList);
+                var arr=[];
+                urlList.forEach(function each(url) {
+                    arr.push(url.URL);
+                });
+                var jsonObj= {id:ws.id,type:'blackList',allSites:arr};
+                wss.broadcast(JSON.stringify(jsonObj));
             });
         }
         else if (type=='cookie'){
             message.forEach();
         }
         //SENDING DATA
-        wss.broadcast(message)
+        wss.broadcast(message);
         /*
         wss.clients.forEach(function each(client) {//sends message back to ALL clients MUST CHANGE
             if (client.readyState === WebSocket.OPEN) {

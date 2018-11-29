@@ -227,10 +227,12 @@ module.exports = {
         });
     },
 
-    getSecurityWebsites: function () {
+    getSecurityWebsites: function (callback) {//WORKS
         db.query("SELECT URL FROM securitywebsites", function(err,result,fields){
             if(err) throw err;
-            return result;
+            var urlArr = result;
+            //return userStatus;
+            callback(urlArr);
         });
     }
 };
