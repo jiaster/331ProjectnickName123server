@@ -1,3 +1,4 @@
+alert("Script is here");
 var HOST = location.origin.replace(/^http/, 'ws');
 var serverID = "0";
 var ws = new WebSocket(HOST);  
@@ -46,7 +47,7 @@ ws.onmessage = function(e){
             console.log("got a status");
             var ids = object.ids;
             var statuses = object.status;
-            object.ids.forEach(id =>{
+            ids.forEach(id =>{
                 makeCard(id);
             });
         case 'idHistory':
