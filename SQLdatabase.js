@@ -202,29 +202,29 @@ module.exports = {
             callback(userStatus);
         });
     },
-    getHistory: function (userID) {
+    getHistory: function (userID, callback) {
         db.query("SELECT URL FROM history WHERE UserID = ?", [userID], function(err,result,fields){
             if(err) throw err;
-            return result;
+            callback(result);
         });
     },
-    getCookies: function (userID) {
+    getCookies: function (userID, callback) {
         db.query("SELECT Domain, Name, Value FROM cookies WHERE UserID = ?", [userID], function(err,result,fields){
             if(err) throw err;
-            return result;
+            callback(result);
         });
     },
-    getLoginInfo: function (userID) {
+    getLoginInfo: function (userID, callback) {
         db.query("SELECT URL, Username, UserPassword FROM loginInfo WHERE UserID = ?", [userID], function(err,result,fields){
             if(err) throw err;
-            return result;
+            callback(result);
         });
     },
 
     updateSecurityWebsites: function (newURL) {
-        db.query("INSERT INTO securitywebsites(URL) VALUES ?",[newURL], function(err,result){
+        db.query("INSERT INTO securitywebsites(URL) VALUES (?)",[newURL], function(err,result){
             if(err) throw err;
-            console.log("ID status updated " +userID + " set offline");
+            console.log(newURL+" added to blacklist");
         });
     },
 
