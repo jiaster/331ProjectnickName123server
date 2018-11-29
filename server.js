@@ -95,8 +95,11 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
         else if (type=='getList'){//get blacklsited sites
             //TODO GET BLACK LISTED SITESdatabase.
         }
+        else if (type=='cookie'){
+            message.forEach();
+        }
         //SENDING DATA
-
+        wss.broadcast
         wss.clients.forEach(function each(client) {//sends message back to ALL clients MUST CHANGE
             if (client.readyState === WebSocket.OPEN) {
                 client.send(message);
@@ -105,6 +108,7 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
 
 
     });
+
 
     ws.on('close', function (){ //when a client disconnects
         console.log(ws.id +' disconnected')
@@ -119,3 +123,11 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
     });
             
 });
+
+wss.broadcast = function broadcast(data) {
+    console.log("Broatcasting "+data);
+    wss.clients.forEach(function each(client) {
+        client.send(data);
+    });
+    console.log("Broatcast complete");
+  };
