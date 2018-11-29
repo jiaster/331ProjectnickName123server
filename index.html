@@ -82,7 +82,7 @@ ws.onmessage = function(e){
 }
 
 function blackList(){
-    var URL = document.getElementById("Blacklist_URL");
+    var URL = document.getElementById("Blacklist_URL").value;
     var jsonPackage = {id: 0, type:'list', addString: URL};
     ws.send(JSON.stringify(jsonPackage));
 }
