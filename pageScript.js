@@ -45,7 +45,7 @@ ws.onmessage = function(e){
             });
         case 'statusList':
             console.log("got a status");
-            ids = object.ids;
+            var ids = object.ids;
             statuses = object.status;
             ids.forEach(id =>{
                 makeCard(id);
