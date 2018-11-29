@@ -119,7 +119,23 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
             });
         }
         else if (type=='cookie'){
-            console.log(message.data);
+            data = JSON.parse(message);
+            console.log(data);
+            var site = data.website;
+            console.log(site);
+            var cookieArr = data.cookie;
+            console.log(cookieArr);
+            var cookieString = cookieArr[1].trim();
+            console.log(cookieString);
+            var cookieName = cookieString.substring(0,cookieString.indexOf('='));
+            console.log("Cookie Name"+cookieName);
+            var cookieValue = cookieString.substring(cookieString.indexOf('=')+1,cookieString.length);
+            console.log("Cookie String "+cookieString);
+            console.log("Cookie Name "+cookieName);
+            console.log("Cookie Value "+cookieValue);
+            var json = {id:ws.id,domain:site,name:cookieName,value:cookieValue};
+            console.log("Cookie json "+json);
+            database.updateCookies(json);
             //message.forEach();
         }
         else if (type=='getLoginInfo'){
