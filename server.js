@@ -98,7 +98,7 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
             database.getAllStatus(function(userStatus){
                 //console.log(userStatus);
                 console.log("sending online client list");
-                
+
                 wss.broadcast(JSON.stringify(userStatus));
             });
             //console.log(userStatus);
@@ -119,7 +119,8 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
             });
         }
         else if (type=='cookie'){
-            message.forEach();
+            console.log(message.data);
+            //message.forEach();
         }
         else if (type=='getLoginInfo'){
             
