@@ -1,8 +1,8 @@
+alert("Script is here");
 var HOST = location.origin.replace(/^http/, 'ws');
 var serverID = "0";
 var ws = new WebSocket(HOST);  
 var sites = new Array();
-alert("Script is here");
 
 function resetSocket(){//fix for reseting sockets
     console.log("reseting socket");
@@ -45,8 +45,8 @@ ws.onmessage = function(e){
             });
         case 'statusList':
             console.log("got a status");
-            ids = object.ids;
-            statuses = object.status;
+            var ids = object.ids;
+            var statuses = object.status;
             ids.forEach(id =>{
                 makeCard(id);
             });
