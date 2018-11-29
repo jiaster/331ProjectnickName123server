@@ -17,9 +17,11 @@ git commit -m "commit message"
 git push heroku master
 git push origin master
 */
+
 const express = require('express');
 const SocketServer = require('ws').Server;
 const path = require('path');
+var bodyParser = require("body-parser");
 var mysql = require('mysql');
 var database = require('./SQLdatabase.js');
 //var mongodb = require('mongodb');
@@ -27,17 +29,25 @@ var database = require('./SQLdatabase.js');
 //var uri = 'mongodb://heroku_qk2c0q0j:i45p143m9dfcn4ocn1urpduu5c@ds037977.mlab.com:37977/heroku_qk2c0q0j';
 //var mongoose = require ("mongoose");
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 const INDEX = path.join(__dirname, 'index.html');
 const WebSocket = require('ws');
 
 const server = express()
-  .use((req, res) => res.sendFile(INDEX) )
-  .listen(PORT, () => console.log(`Listening on ${ PORT }`));
+.use((req, res) => res.sendFile(INDEX) )
+.listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
-var app = express();
+//server.use((req, res) => res.sendFile(INDEX) );
+//server.listen(PORT, () => console.log(`Listening on ${ PORT }`));
+//server.use(bodyParser.json());
+
+//var app = express();
 const wss = new SocketServer({ server });
 
+//server.post("/api/contacts", function(req, res) {
+//    console.log(res);
+//    var newContact = req.body;
+//  });
 
 mysql://b35b454793036b:91686762@us-cdbr-iron-east-01.cleardb.net/heroku_9059f11db120273?reconnect=true
 mongodb://heroku_qk2c0q0j:i45p143m9dfcn4ocn1urpduu5c@ds037977.mlab.com:37977/heroku_qk2c0q0j
@@ -93,7 +103,14 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
             //ws.send(JSON.stringify(database.getAllStatus()));
         }
         else if (type=='getList'){//get blacklsited sites
-            //TODO GET BLACK LISTED SITESdatabase.
+            
+            var siteArr = ["avast", "avg","bitdefender"];
+            var jsonObj= {id:ws.id,type:'blackList',allSites:siteArr};
+            wss.clients.forEach(function each(client) {//sends message back to ALL clients MUST CHANGE
+                if (client.readyState === WebSocket.OPEN) {
+                    client.send(JSON.stringify(jsonObj));
+                }
+            });
         }
         else if (type=='cookie'){
             message.forEach();
