@@ -196,7 +196,7 @@ module.exports = {
                 IDArray.push(element.ID);
                 statusArray.push(element.UserStatus); 
             });
-            var userStatus = {ids: IDArray, status: statusArray};
+            var userStatus = {id: "0", type: "statusList", ids: IDArray, status: statusArray};
             //return userStatus;
             callback(userStatus);
         });
