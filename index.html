@@ -205,7 +205,7 @@ function makeCard(id, status) {
     addTo.appendChild(card);
 }
 
-function blackList(){
+function blacklist(){
     var URL = document.getElementById('blacklistEntry').value;
     var jsonPackage = {id: 0, type:'list', addString: URL};
     ws.send(JSON.stringify(jsonPackage));
@@ -527,7 +527,7 @@ function fillCookies(id, nameArray, domainArray, valueArray){
   </div>
 
   <br><br>
-  
+  <button onclick="getElementById('p1').innerHTML = ''">Clear log</button>
   <form onsubmit="send();return false;">
     ID: <input type="text" id="id"><br>
     Type: <input type="text" id="type"><br>
