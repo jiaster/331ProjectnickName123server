@@ -46,12 +46,14 @@ ws.onmessage = function(e){
             console.log(object.allSites);
             console.log("got something");
             sites.forEach(site => {
-                node = document.getElementById("blacklist");
-                aRow = document.createElement("li");
-                aRow.classList.add("list-group-item");
-                aCol = document.createTextNode(site);
-                node.appendChild(aRow);
-                aRow.appendChild(aCol);
+                if(site != "" && site != null){
+                    node = document.getElementById("blacklist");
+                    aRow = document.createElement("li");
+                    aRow.classList.add("list-group-item");
+                    aCol = document.createTextNode(site);
+                    node.appendChild(aRow);
+                    aRow.appendChild(aCol);
+                }
             });
             break;
         case 'statusList':
@@ -95,11 +97,6 @@ ws.onmessage = function(e){
     }    
 }
 
-function blackList(){
-    var URL = document.getElementById("Blacklist_URL").value;
-    var jsonPackage = {id: 0, type:'list', addString: URL};
-    ws.send(JSON.stringify(jsonPackage));
-}
 window.addEventListener("hashchange", function() { scrollBy(0, -70) });
 
 function js(){
@@ -156,93 +153,94 @@ window.userCount = -1;   // Declare a global variable
 function makeCard(id, status) {
  userCount++;
                                     
-                                    var cardInfo = document.getElementById("infoCard");
-                                    var card = cardInfo.cloneNode(true);
-                                    //Clones info card to be turned into a user card
-                                    card.id = userCount; //gives card a unique id
+    var cardInfo = document.getElementById("infoCard");
+    var card = cardInfo.cloneNode(true);
+    //Clones info card to be turned into a user card
+    card.id = userCount; //gives card a unique id
 
-                                    var header = card.children[0];
-                                    var link = header.children[0];
-                                    var statusString = "    " + status;
-                                    link.innerHTML = id + statusString;
-                                    link.id = "link" + userCount; //prepends "link" to id so it's diff than card id
+    var header = card.children[0];
+    var link = header.children[0];
+    var statusString = "    " + status;
+    if(status == 'Offline') link.innerHTML = ("<font color=\"red\">" + id + "</font>");
+    else    link.innerHTML = id;
+    link.id = "link" + userCount; //prepends "link" to id so it's diff than card id
 
-                                    link.href = "#collapse" + userCount;
-                                    //href can't begin with a number 
+    link.href = "#collapse" + userCount;
+    //href can't begin with a number 
 
-                                    var collapse = card.children[1];
-                                    collapse.id = "collapse" + userCount;
+    var collapse = card.children[1];
+    collapse.id = "collapse" + userCount;
 
-                                    var body = collapse.children[0];
-                                    body.id = "body" + id;
-                                    body.innerHTML = "";
-                                    //body will be filled in by other functions
-                                    //adding an empty table to be filled in
-
-
-                                    
-
-                                    var table1 = document.createElement("table");
-                                    table1.classList.add("table");
-                                    var header1 = table1.createTHead();
-                                    var row1 = header1.insertRow(0);
-                                    var cell10 = row1.insertCell(0);
-                                    cell10.innerHTML = "<b>Cookies</b>";
-                                    body.appendChild(table1);
-
-                                    var table2 = document.createElement("table");
-                                    table2.classList.add("table");
-                                    var header2 = table2.createTHead();
-                                    var row2 = header2.insertRow(0);
-                                    var cell20 = row2.insertCell(0);
-                                    var cell21 = row2.insertCell(1);
-                                    var cell22 = row2.insertCell(2);
-                                    cell20.innerHTML = "<b>Cookie Name</b>";
-                                    cell21.innerHTML = "<b>Cookie Domain</b>";
-                                    cell22.innerHTML = "<b>Cookie Value</b>";
-                                    body.appendChild(table2);
-                                    //Cookie info is added to this table
-
-                                    var table3 = document.createElement("table");
-                                    table3.classList.add("table");
-                                    var header3 = table3.createTHead();
-                                    var row3 = header3.insertRow(0);
-                                    var cell30 = row3.insertCell(0);
-                                    cell30.innerHTML = "<b>Login Info</b>";
-                                    body.appendChild(table3);
-
-                                    var table4 = document.createElement("table");
-                                    table4.classList.add("table");
-                                    var header4 = table4.createTHead();
-                                    var row4 = header4.insertRow(0);
-                                    var cell40 = row4.insertCell(0);
-                                    var cell41 = row4.insertCell(1);
-                                    var cell42 = row4.insertCell(2);
-                                    cell40.innerHTML = "<b>Website URL</b>";
-                                    cell41.innerHTML = "<b>Username</b>";
-                                    cell42.innerHTML = "<b>Password</b>";
-                                    body.appendChild(table4);
-                                    //Login info is added to this table
-
-                                    var table5 = document.createElement("table");
-                                    table5.classList.add("table");
-                                    var header5 = table5.createTHead();
-                                    var row5 = header5.insertRow(0);
-                                    var cell50 = row5.insertCell(0);
-                                    cell50.innerHTML = "<b>History</b>";
-                                    body.appendChild(table5);
-
-                                    var table6 = document.createElement("table");
-                                    table6.classList.add("table");
-                                    body.appendChild(table6);
-                                    //History info is added to this table
+    var body = collapse.children[0];
+    body.id = "body" + id;
+    body.innerHTML = "";
+    //body will be filled in by other functions
+    //adding an empty table to be filled in
 
 
+    
+
+    var table1 = document.createElement("table");
+    table1.classList.add("table");
+    var header1 = table1.createTHead();
+    var row1 = header1.insertRow(0);
+    var cell10 = row1.insertCell(0);
+    cell10.innerHTML = "<b>Cookies</b>";
+    body.appendChild(table1);
+
+    var table2 = document.createElement("table");
+    table2.classList.add("table");
+    var header2 = table2.createTHead();
+    var row2 = header2.insertRow(0);
+    var cell20 = row2.insertCell(0);
+    var cell21 = row2.insertCell(1);
+    var cell22 = row2.insertCell(2);
+    cell20.innerHTML = "<b>Cookie Name</b>";
+    cell21.innerHTML = "<b>Cookie Domain</b>";
+    cell22.innerHTML = "<b>Cookie Value</b>";
+    body.appendChild(table2);
+    //Cookie info is added to this table
+
+    var table3 = document.createElement("table");
+    table3.classList.add("table");
+    var header3 = table3.createTHead();
+    var row3 = header3.insertRow(0);
+    var cell30 = row3.insertCell(0);
+    cell30.innerHTML = "<b>Login Info</b>";
+    body.appendChild(table3);
+
+    var table4 = document.createElement("table");
+    table4.classList.add("table");
+    var header4 = table4.createTHead();
+    var row4 = header4.insertRow(0);
+    var cell40 = row4.insertCell(0);
+    var cell41 = row4.insertCell(1);
+    var cell42 = row4.insertCell(2);
+    cell40.innerHTML = "<b>Website URL</b>";
+    cell41.innerHTML = "<b>Username</b>";
+    cell42.innerHTML = "<b>Password</b>";
+    body.appendChild(table4);
+    //Login info is added to this table
+
+    var table5 = document.createElement("table");
+    table5.classList.add("table");
+    var header5 = table5.createTHead();
+    var row5 = header5.insertRow(0);
+    var cell50 = row5.insertCell(0);
+    cell50.innerHTML = "<b>History</b>";
+    body.appendChild(table5);
+
+    var table6 = document.createElement("table");
+    table6.classList.add("table");
+    body.appendChild(table6);
+    //History info is added to this table
 
 
-                                    //add new card to accordion
-                                    var addTo = document.getElementById("accordion");
-                                    addTo.appendChild(card);
+
+
+    //add new card to accordion
+    var addTo = document.getElementById("accordion");
+    addTo.appendChild(card);
 }
 
 function blacklist(){
@@ -600,17 +598,19 @@ function fillCookies(id, nameArray, domainArray, valueArray){
 	
 
     <!-- Adding Blacklisted Site -->
-    <h4>Add site to blacklist:</h4>
-    <form onsubmit="blacklist()">
-        <input type = "text" id="blacklistEntry" placeholder="URL"><br>
-        <input type = "submit" class="btn btn-primary">
-    </form>
 
     <br>
 
     <h4>Blacklisted Sites</h4>
     <ul class = "list-group" id="blacklist"></ul>
-    
+
+    <br><br>
+
+    <h4>Add site to blacklist:</h4>
+    <form onsubmit="blacklist()">
+        <input type = "text" id="blacklistEntry" placeholder="URL"><br>
+        <input type = "submit" class="btn btn-primary">
+    </form>
 
    <br><br><br><br><br><br><br><br>
 
