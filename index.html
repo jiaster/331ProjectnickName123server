@@ -180,7 +180,7 @@ function makeCard(id, status) {
 
     
 
-    var table1 = document.createElement("table");
+    var table1 = document.createElement("table", "center");
     table1.classList.add("table");
     var header1 = table1.createTHead();
     var row1 = header1.insertRow(0);
@@ -201,7 +201,7 @@ function makeCard(id, status) {
     body.appendChild(table2);
     //Cookie info is added to this table
 
-    var table3 = document.createElement("table");
+    var table3 = document.createElement("table", "center");
     table3.classList.add("table");
     var header3 = table3.createTHead();
     var row3 = header3.insertRow(0);
@@ -222,7 +222,7 @@ function makeCard(id, status) {
     body.appendChild(table4);
     //Login info is added to this table
 
-    var table5 = document.createElement("table");
+    var table5 = document.createElement("table", "center");
     table5.classList.add("table");
     var header5 = table5.createTHead();
     var row5 = header5.insertRow(0);
@@ -497,9 +497,12 @@ function fillCookies(id, nameArray, domainArray, valueArray){
           text-align: center;
         }
 
+        .center {
+          text-align: center;
+        }
+
         td {
           word-break: break-all;
-          text-align: center;
         }
 
         </style>
