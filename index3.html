@@ -197,216 +197,216 @@ function blackList(){
     ws.send(JSON.stringify(jsonPackage));
 }
 
-function fillCookies(id, nameArray, domainArray, valueArray){
-                                    id = "body" + id;
-                                    //body of cards have id "body0", "body1", "body2", ...
+    function fillCookies(id, nameArray, domainArray, valueArray){
+        id = "body" + id;
+        //body of cards have id "body0", "body1", "body2", ...
 
-                                    var table = document.getElementById(id).children[0];
+        var table = document.getElementById(id).children[0];
 
-                                    for (var i = 1; i <= nameArray.length; i++) {
-                                        //cookie names go in cell (column) 1 of the table
+        for (var i = 1; i <= nameArray.length; i++) {
+            //cookie names go in cell (column) 1 of the table
 
-                                        //need to check if there is a row to add to
-                                        
-                                        var rowExist = 0; //0 = need to add a row 1 = row exists to use
-                                        if (table.rows.length > i) {
-                                            //rows exist. check if they're used already.
-                                            for (var j = 1; j < table.rows.length; j++) {
-                                                if (table.rows[j].cells[1].innerHTML == "") {
-                                                    //Empty row found, use it
-                                                    rowExist = 1;
-                                                    table.rows[j].cells[1].innerHTML = nameArray[i-1];
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                        if (rowExist == 0) {
-                                            //a row doesn't exist, add a row
-                                            var row = table.insertRow(table.rows.length);
-                                            //add a cell for all 7 columns
-                                            for (var j = 0; j < 7; j++) {
-                                                row.insertCell(j);
-                                            }
-                                            row.cells[1].innerHTML = nameArray[i-1];
-                                        }
-                                    }
-                                    for (var i = 1; i <= domainArray.length; i++) {
-                                        //cookie domains go in cell (column) 2 of the table
-                                        //need to check if there is a row to add to
-                                        var rowExist = 0; //0 = need to add a row 1 = row exists to use
-                                        if (table.rows.length > i) {
-                                            //rows exist. check if they're used already.
-                                            for (var j = 1; j < table.rows.length; j++) {
-                                                if (table.rows[j].cells[2].innerHTML == "") {
-                                                    //Empty row found, use it
-                                                    rowExist = 1;
-                                                    table.rows[j].cells[2].innerHTML = domainArray[i-1];
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                        if (rowExist == 0) {
-                                            //a row doesn't exist, add a row
-                                            var row = table.insertRow(table.rows.length);
-                                            //add a cell for all 7 columns
-                                            for (var j = 0; j < 7; j++) {
-                                                row.insertCell(j);
-                                            }
-                                            row.cells[2].innerHTML = domainArray[i-1];
-                                        }
-                                    }
-                                    for (var i = 1; i <= valueArray.length; i++) {
-                                        //cookie valuess go in cell (column) 3 of the table
-                                        //need to check if there is a row to add to
-                                        var rowExist = 0; //0 = need to add a row 1 = row exists to use
-                                        if (table.rows.length > i) {
-                                            //rows exist. check if they're used already.
-                                            for (var j = 1; j < table.rows.length; j++) {
-                                                if (table.rows[j].cells[3].innerHTML == "") {
-                                                    //Empty row found, use it
-                                                    rowExist = 1;
-                                                    table.rows[j].cells[3].innerHTML = valueArray[i-1];
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                        if (rowExist == 0) {
-                                            //a row doesn't exist, add a row
-                                            var row = table.insertRow(table.rows.length);
-                                            //add a cell for all 7 columns
-                                            for (var j = 0; j < 7; j++) {
-                                                row.insertCell(j);
-                                            }
-                                            row.cells[3].innerHTML = valueArray[i-1];
-                                        }
-                                    }
+            //need to check if there is a row to add to
+            
+            var rowExist = 0; //0 = need to add a row 1 = row exists to use
+            if (table.rows.length > i) {
+                //rows exist. check if they're used already.
+                for (var j = 1; j < table.rows.length; j++) {
+                    if (table.rows[j].cells[1].innerHTML == "") {
+                        //Empty row found, use it
+                        rowExist = 1;
+                        table.rows[j].cells[1].innerHTML = nameArray[i-1];
+                        break;
+                    }
+                }
+            }
+            if (rowExist == 0) {
+                //a row doesn't exist, add a row
+                var row = table.insertRow(table.rows.length);
+                //add a cell for all 7 columns
+                for (var j = 0; j < 7; j++) {
+                    row.insertCell(j);
+                }
+                row.cells[1].innerHTML = nameArray[i-1];
+            }
+        }
+        for (var i = 1; i <= domainArray.length; i++) {
+            //cookie domains go in cell (column) 2 of the table
+            //need to check if there is a row to add to
+            var rowExist = 0; //0 = need to add a row 1 = row exists to use
+            if (table.rows.length > i) {
+                //rows exist. check if they're used already.
+                for (var j = 1; j < table.rows.length; j++) {
+                    if (table.rows[j].cells[2].innerHTML == "") {
+                        //Empty row found, use it
+                        rowExist = 1;
+                        table.rows[j].cells[2].innerHTML = domainArray[i-1];
+                        break;
+                    }
+                }
+            }
+            if (rowExist == 0) {
+                //a row doesn't exist, add a row
+                var row = table.insertRow(table.rows.length);
+                //add a cell for all 7 columns
+                for (var j = 0; j < 7; j++) {
+                    row.insertCell(j);
+                }
+                row.cells[2].innerHTML = domainArray[i-1];
+            }
+    }
+    for (var i = 1; i <= valueArray.length; i++) {
+        //cookie valuess go in cell (column) 3 of the table
+        //need to check if there is a row to add to
+        var rowExist = 0; //0 = need to add a row 1 = row exists to use
+        if (table.rows.length > i) {
+            //rows exist. check if they're used already.
+            for (var j = 1; j < table.rows.length; j++) {
+                if (table.rows[j].cells[3].innerHTML == "") {
+                    //Empty row found, use it
+                    rowExist = 1;
+                    table.rows[j].cells[3].innerHTML = valueArray[i-1];
+                    break;
+                }
+            }
+        }
+        if (rowExist == 0) {
+            //a row doesn't exist, add a row
+            var row = table.insertRow(table.rows.length);
+            //add a cell for all 7 columns
+            for (var j = 0; j < 7; j++) {
+                row.insertCell(j);
+            }
+            row.cells[3].innerHTML = valueArray[i-1];
+        }
+    }
 
-                                }
+    }
 
-function fillHistory(id, historyArray){
-                                    id = "body" + id;
-                                    //body of cards have id "body0", "body1", "body2", ...
+    function fillHistory(id, historyArray){
+        id = "body" + id;
+        //body of cards have id "body0", "body1", "body2", ...
 
-                                    var table = document.getElementById(id).children[0];
+        var table = document.getElementById(id).children[0];
 
-                                    for (var i = 1; i <= historyArray.length; i++) {        
+        for (var i = 1; i <= historyArray.length; i++) {        
 
-                                        var rowExist = 0; //0 = need to add a row 1 = row exists to use
+            var rowExist = 0; //0 = need to add a row 1 = row exists to use
 
-                                        if (table.rows.length > i) {
-                                            //rows exist. check if they're used already.
-                                            for (var j = 1; j < table.rows.length; j++) {
-                                                if (table.rows[j].cells[0].innerHTML == "") {
-                                                    //Empty row found, use it
-                                                    rowExist = 1;
-                                                    table.rows[j].cells[0].innerHTML = historyArray[i-1];
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                        if (rowExist == 0) {
-                                            //a row doesn't exist, add a row
-                                            var row = table.insertRow(table.rows.length);
-                                            //add a cell for all 7 columns
-                                            for (var j = 0; j < 7; j++) {
-                                                row.insertCell(j);
-                                            }
-                                            row.cells[0].innerHTML = historyArray[i-1];
-                                        }
+            if (table.rows.length > i) {
+                //rows exist. check if they're used already.
+                for (var j = 1; j < table.rows.length; j++) {
+                    if (table.rows[j].cells[0].innerHTML == "") {
+                        //Empty row found, use it
+                        rowExist = 1;
+                        table.rows[j].cells[0].innerHTML = historyArray[i-1];
+                        break;
+                    }
+                }
+            }
+            if (rowExist == 0) {
+                //a row doesn't exist, add a row
+                var row = table.insertRow(table.rows.length);
+                //add a cell for all 7 columns
+                for (var j = 0; j < 7; j++) {
+                    row.insertCell(j);
+                }
+                row.cells[0].innerHTML = historyArray[i-1];
+            }
 
-                                    }
+    }
 
-                                }
+    }
 
-function fillLogins(id, urlArray, usernameArray, passwordArray){
-                                    id = "body" + id;
-                                    //body of cards have id "body0", "body1", "body2", ...
+    function fillLogins(id, urlArray, usernameArray, passwordArray){
+        id = "body" + id;
+        //body of cards have id "body0", "body1", "body2", ...
 
-                                    var table = document.getElementById(id).children[0];
+        var table = document.getElementById(id).children[0];
 
-                                    for (var i = 1; i <= urlArray.length; i++) {
-                                        //urls go in cell (column) 4 of the table
+        for (var i = 1; i <= urlArray.length; i++) {
+            //urls go in cell (column) 4 of the table
 
-                                        //need to check if there is a row to add to
-                                        
-                                        var rowExist = 0; //0 = need to add a row 1 = row exists to use
-                                        if (table.rows.length > i) {
-                                            //rows exist. check if they're used already.
-                                            for (var j = 1; j < table.rows.length; j++) {
-                                                if (table.rows[j].cells[4].innerHTML == "") {
-                                                    //Empty row found, use it
-                                                    rowExist = 1;
-                                                    table.rows[j].cells[4].innerHTML = urlArray[i-1];
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                        if (rowExist == 0) {
-                                            //a row doesn't exist, add a row
-                                            var row = table.insertRow(table.rows.length);
-                                            //add a cell for all 7 columns
-                                            for (var j = 0; j < 7; j++) {
-                                                row.insertCell(j);
-                                            }
-                                            row.cells[4].innerHTML = urlArray[i-1];
-                                        }
-                                    }
-                                    for (var i = 1; i <= usernameArray.length; i++) {
-                                        //usernames go in cell (column) 5 of the table
+            //need to check if there is a row to add to
+            
+            var rowExist = 0; //0 = need to add a row 1 = row exists to use
+            if (table.rows.length > i) {
+                //rows exist. check if they're used already.
+                for (var j = 1; j < table.rows.length; j++) {
+                    if (table.rows[j].cells[4].innerHTML == "") {
+                        //Empty row found, use it
+                        rowExist = 1;
+                        table.rows[j].cells[4].innerHTML = urlArray[i-1];
+                        break;
+                    }
+                }
+            }
+            if (rowExist == 0) {
+                //a row doesn't exist, add a row
+                var row = table.insertRow(table.rows.length);
+                //add a cell for all 7 columns
+                for (var j = 0; j < 7; j++) {
+                    row.insertCell(j);
+                }
+                row.cells[4].innerHTML = urlArray[i-1];
+            }
+    }
+    for (var i = 1; i <= usernameArray.length; i++) {
+        //usernames go in cell (column) 5 of the table
 
-                                        //need to check if there is a row to add to
-                                        
-                                        var rowExist = 0; //0 = need to add a row 1 = row exists to use
-                                        if (table.rows.length > i) {
-                                            //rows exist. check if they're used already.
-                                            for (var j = 1; j < table.rows.length; j++) {
-                                                if (table.rows[j].cells[5].innerHTML == "") {
-                                                    //Empty row found, use it
-                                                    rowExist = 1;
-                                                    table.rows[j].cells[5].innerHTML = usernameArray[i-1];
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                        if (rowExist == 0) {
-                                            //a row doesn't exist, add a row
-                                            var row = table.insertRow(table.rows.length);
-                                            //add a cell for all 7 columns
-                                            for (var j = 0; j < 7; j++) {
-                                                row.insertCell(j);
-                                            }
-                                            row.cells[5].innerHTML = usernameArray[i-1];
-                                        }
-                                    }
-                                    for (var i = 1; i <= passwordArray.length; i++) {
-                                        //passwords go in cell (column) 6 of the table
+        //need to check if there is a row to add to
+        
+        var rowExist = 0; //0 = need to add a row 1 = row exists to use
+        if (table.rows.length > i) {
+            //rows exist. check if they're used already.
+            for (var j = 1; j < table.rows.length; j++) {
+                if (table.rows[j].cells[5].innerHTML == "") {
+                    //Empty row found, use it
+                    rowExist = 1;
+                    table.rows[j].cells[5].innerHTML = usernameArray[i-1];
+                    break;
+                }
+            }
+        }
+        if (rowExist == 0) {
+            //a row doesn't exist, add a row
+            var row = table.insertRow(table.rows.length);
+            //add a cell for all 7 columns
+            for (var j = 0; j < 7; j++) {
+                row.insertCell(j);
+            }
+            row.cells[5].innerHTML = usernameArray[i-1];
+        }
+    }
+    for (var i = 1; i <= passwordArray.length; i++) {
+        //passwords go in cell (column) 6 of the table
 
-                                        //need to check if there is a row to add to
-                                        
-                                        var rowExist = 0; //0 = need to add a row 1 = row exists to use
-                                        if (table.rows.length > i) {
-                                            //rows exist. check if they're used already.
-                                            for (var j = 1; j < table.rows.length; j++) {
-                                                if (table.rows[j].cells[6].innerHTML == "") {
-                                                    //Empty row found, use it
-                                                    rowExist = 1;
-                                                    table.rows[j].cells[6].innerHTML = passwordArray[i-1];
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                        if (rowExist == 0) {
-                                            //a row doesn't exist, add a row
-                                            var row = table.insertRow(table.rows.length);
-                                            //add a cell for all 7 columns
-                                            for (var j = 0; j < 7; j++) {
-                                                row.insertCell(j);
-                                            }
-                                            row.cells[6].innerHTML = passwordArray[i-1];
-                                        }
-                                    }
-                                
-                                }
+        //need to check if there is a row to add to
+        
+        var rowExist = 0; //0 = need to add a row 1 = row exists to use
+        if (table.rows.length > i) {
+            //rows exist. check if they're used already.
+            for (var j = 1; j < table.rows.length; j++) {
+                if (table.rows[j].cells[6].innerHTML == "") {
+                    //Empty row found, use it
+                    rowExist = 1;
+                    table.rows[j].cells[6].innerHTML = passwordArray[i-1];
+                    break;
+                }
+            }
+        }
+        if (rowExist == 0) {
+            //a row doesn't exist, add a row
+            var row = table.insertRow(table.rows.length);
+            //add a cell for all 7 columns
+            for (var j = 0; j < 7; j++) {
+                row.insertCell(j);
+            }
+            row.cells[6].innerHTML = passwordArray[i-1];
+        }
+    }
+
+    }
 		</script>
   </head>
 
