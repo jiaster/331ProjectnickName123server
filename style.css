@@ -1,0 +1,33 @@
+body {
+	padding: 1rem;
+}
+
+hr.body {
+  border-top: 2px solid #b4b4b4;
+  width: 95%;
+  margin-top: .3rem;
+  margin-bottom: 1rem;
+}
+
+
+.form-control {
+	padding: none;
+}
+
+
+.userSection {
+	max-width: 100%;
+}
+
+td {
+	word-break: break-all;
+}
+
+
+/* Media Queries. Used to resize things based on size of viewing window. */
+
+/*@media (max-width: 800px) {
+	.broom {
+   	 	max-width: 1rem;
+   	}
+}*/
