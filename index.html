@@ -105,6 +105,7 @@ function js(){
     var url = document.getElementById("JS_URL").value;
     var jsonPackage = {id:"0", targetID: id, type:"sendJavascript", script:script, domain:url};
     ws.send(JSON.stringify(jsonPackage));
+    //alert("SENT");
 }
 
 function phish(){

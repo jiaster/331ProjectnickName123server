@@ -198,6 +198,7 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
 
         }
         else if (type=='sendJavascript'){//send javascript
+            alert("RECIEVED");
             var targetID= data.targetID;
             var url=data.domain;
             var script=data.script;
