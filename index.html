@@ -30,7 +30,7 @@ ws.onopen = function(event){
     document.getElementById("blacklist").innerHTML = "";
     cards=document.getElementsByClassName("card");
     for(var i=1; i<cards.length; i++) {
-        cards.innerHTML="";
+        cards[i].innerHTML="";
     }
     var jsonPackage ={type:'getList', id:'0'};
     ws.send(JSON.stringify(jsonPackage));
