@@ -28,10 +28,6 @@ ws.onclose = function(e){
 
 ws.onopen = function(event){
     document.getElementById("blacklist").innerHTML = "";
-    cards=document.getElementsByClassName("card");
-    for(var i=1; i<cards.length; i++) {
-        cards[i].innerHTML="";
-    }
     var jsonPackage ={type:'getList', id:'0'};
     ws.send(JSON.stringify(jsonPackage));
     console.log("Request sent");
@@ -66,6 +62,10 @@ ws.onmessage = function(e){
         case 'statusList':
         if (object.id=='0'){
             console.log("got a status");
+            cards=document.getElementsByClassName("card");
+            for(var i=1; i<cards.length; i++) {
+                cards[i].remove();
+            }
             var ids = new Array();
             ids = object.ids;
             var statuses = object.status;
