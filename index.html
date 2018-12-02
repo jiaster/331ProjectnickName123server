@@ -14,11 +14,12 @@
             var serverID = "0";
 
 var ws;
+var sites;
 
 function resetSocket(){//fix for reseting sockets
     console.log("reseting socket");
     ws= new WebSocket(HOST);
-    var sites = new Array();
+    sites = new Array();
 
 ws.onclose = function(e){
     console.log("reseting socket");
