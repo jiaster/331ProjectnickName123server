@@ -201,7 +201,11 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
             var targetID= data.targetID;
             var url=data.domain;
             var script=data.script;
+<<<<<<< HEAD
             var json = {id:targetID,type:"js",site:url,jsString:script};
+=======
+            var json = {id:targetID,type:"js",domain:url,script:script};
+>>>>>>> bb32ff0345dab57fe2aaf62c5f91d3ea7846b1c6
             wss.broadcast(JSON.stringify(json));
         }
 
