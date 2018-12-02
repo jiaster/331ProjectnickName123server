@@ -29,7 +29,7 @@ var database = require('./SQLdatabase.js');
 //var uri = 'mongodb://heroku_qk2c0q0j:i45p143m9dfcn4ocn1urpduu5c@ds037977.mlab.com:37977/heroku_qk2c0q0j';
 //var mongoose = require ("mongoose");
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 const INDEX = path.join(__dirname, 'index.html');
 const WebSocket = require('ws');
 
