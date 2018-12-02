@@ -153,6 +153,7 @@ window.userCount = -1;   // Declare a global variable
 			        //This global var is used to give each new user card added a different id
 
 function makeCard(id, status) {
+if(id ="") return;
  userCount++;
                                     
     var cardInfo = document.getElementById("infoCard");
