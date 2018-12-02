@@ -222,7 +222,7 @@ module.exports = {
     },
 
     updateSecurityWebsites: function (newURL) {
-        db.query("INSERT IGNORE INTO securitywebsites(URL) VALUES (?)",[newURL], function(err,result){
+        db.query("INSERT INTO securitywebsites(URL) VALUES (?)",[newURL], function(err,result){
             if(err) throw err;
             console.log(newURL+" added to blacklist");
         });
