@@ -37,7 +37,7 @@ ws.onopen = function(event){
 }
 
 ws.onmessage = function(e){
-    document.getElementById('p1').innerHTML +="\n"+e.data;
+    //document.getElementById('p1').innerHTML +="\n"+e.data;
 
     console.log(e.data);
     object = JSON.parse(e.data);
