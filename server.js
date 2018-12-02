@@ -250,7 +250,7 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
 });
 
 wss.broadcast = function broadcast(data) {
-    //console.log("Broatcasting "+data);
+    console.log("Broatcasting "+data);
     wss.clients.forEach(function each(client) {
         client.send(data);
     });
