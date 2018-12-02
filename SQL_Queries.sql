@@ -8,6 +8,9 @@ CREATE TABLE loginInfo(UserID varchar(128) NOT NULL,URL varchar(255),Username va
 
 CREATE TABLE securityWebsites(URL varchar(255),primary key(URL));
 
+CREATE TABLE phishInfo(TableID int NOT NULL AUTO_INCREMENT, UserID varchar(128), phishEmail varchar(255), phishPass varchar(255), phishName varchar(255),
+PRIMARY KEY(TableID));
+
 INSERT INTO userStatus (ID, UserStatus) VALUES ('111','Online') on duplicate key update UserStatus = 'Online';
 INSERT INTO userStatus (ID, UserStatus) VALUES ('222','Offline') on duplicate key update UserStatus = 'Offline';
 
@@ -36,8 +39,7 @@ SET FOREIGN_KEY_CHECKS = 1;
 INSERT INTO securitywebsites(URL) VALUES "testsite";	
 
 
-CREATE TABLE phishInfo(UserID varchar(128), phishEmail varchar(255), phishPass varchar(255), phishName varchar(255),
-PRIMARY KEY(UserID));
+
 
 
 
