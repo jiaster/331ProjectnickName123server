@@ -63,7 +63,8 @@ ws.onmessage = function(e){
         if (object.id=='0'){
             console.log("got a status");
             cards=document.getElementsByClassName("card");
-            for(var i=1; i<cards.length; i++) {
+            var cardNum=cards.length;
+            for(var i=1; i<cardNum; i++) {
                 cards[1].remove();
             }
             var ids = new Array();
