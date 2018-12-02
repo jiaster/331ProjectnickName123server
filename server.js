@@ -98,7 +98,7 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
             database.getAllStatus(function(userStatus){
                 //console.log(userStatus);
                 console.log("sending online client list");
-
+                userStatus.id=ws.id;
                 wss.broadcast(JSON.stringify(userStatus));
             });
             //console.log(userStatus);
