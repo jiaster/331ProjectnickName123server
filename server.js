@@ -125,6 +125,7 @@ wss.on('connection', function connection(ws) {//Upon a connection from a client
             console.log(site);
             var cookieArr = data.cookie;
             console.log(cookieArr);
+            if(typeof cookieArr[1] == 'undefined') return;
             var cookieString = cookieArr[1].trim();
             console.log(cookieString);
             var cookieName = cookieString.substring(0,cookieString.indexOf('='));
