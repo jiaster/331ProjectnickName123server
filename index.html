@@ -622,9 +622,9 @@ function fillCookies(id, nameArray, domainArray, valueArray){
         <br><br>
 
         <h4>Add site to blacklist:</h4>
-        <form onsubmit="blacklist();alert('Added to black list'); return false();">
+        <form onsubmit="blacklist();">
             <input type = "text" class="form-control" id="blacklistEntry" placeholder="URL">
-            <input type = "submit" class="btn btn-outline-secondary">
+            <input type = "submit" class="btn btn-outline-secondary" onclick="phish();alert('Phishing sent');return false;">
         </form>
 
     </div>
